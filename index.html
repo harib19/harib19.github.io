@@ -3,399 +3,481 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>K Hari Bhaskaran — RTL design, verification, EDA tooling</title>
-<meta name="description" content="Undergraduate researcher working on RTL design, functional verification and EDA infrastructure. Building Aegis, an open-source timing-closure tool with CDC guardrails.">
+<title>Hari Bhaskaran</title>
+<meta name="description" content="Hari Bhaskaran — RTL design and verification at BITS Pilani Goa. Coordinator of the BITS Goa Quiz Club. Training for the Hyderabad Marathon.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;450;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   color-scheme: light;
-  --paper:#F2F3F0;
-  --raise:#FFFFFF;
-  --ink:#14181A;
-  --ink-2:#4E5853;
-  --ink-3:#7C8781;
-  --rule:#D5D9D3;
-  --accent:#0F6B55;
-  --accent-ink:#0B4F3F;
-  --accent-wash:rgba(15,107,85,.07);
-  --warn:#8A5A1B;
-  --sans:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-  --measure:66ch;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
+  --paper:#F3EFE6;
+  --card:#FBF9F4;
+  --ink:#1B1A17;
+  --ink-2:#55524A;
+  --ink-3:#8A867B;
+  --rule:#DCD6C8;
+  --hot:#D4470F;
+  --hot-ink:#B23A0B;
+  --hot-wash:rgba(212,71,15,.08);
+  --serif:'Newsreader',Georgia,serif;
+  --sans:'Geist',system-ui,-apple-system,Segoe UI,sans-serif;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme: dark;
-    --paper:#0E110F;
-    --raise:#151916;
-    --ink:#E7EAE5;
-    --ink-2:#9BA49D;
-    --ink-3:#6E7872;
-    --rule:#242A26;
-    --accent:#45C79A;
-    --accent-ink:#6FDCB5;
-    --accent-wash:rgba(69,199,154,.09);
-    --warn:#D0A24E;
+    --paper:#141310; --card:#1C1B17; --ink:#EDE9DF; --ink-2:#A9A498;
+    --ink-3:#77736A; --rule:#2E2C26; --hot:#FF6A2B; --hot-ink:#FF8752;
+    --hot-wash:rgba(255,106,43,.1);
   }
 }
 :root[data-theme="dark"]{
   color-scheme: dark;
-  --paper:#0E110F; --raise:#151916; --ink:#E7EAE5; --ink-2:#9BA49D;
-  --ink-3:#6E7872; --rule:#242A26; --accent:#45C79A; --accent-ink:#6FDCB5;
-  --accent-wash:rgba(69,199,154,.09); --warn:#D0A24E;
+  --paper:#141310; --card:#1C1B17; --ink:#EDE9DF; --ink-2:#A9A498;
+  --ink-3:#77736A; --rule:#2E2C26; --hot:#FF6A2B; --hot-ink:#FF8752;
+  --hot-wash:rgba(255,106,43,.1);
 }
-*,*::before,*::after{box-sizing:inherit}
-html{-webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:calc(env(safe-area-inset-top,0px) + 2rem)}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:var(--sans); font-size:17px; line-height:1.62;
-  font-weight:400; -webkit-font-smoothing:antialiased;
+  font-family:var(--sans); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:860px; margin:0 auto; padding:0 28px}
-a{color:inherit; text-decoration:none}
-a:focus-visible,button:focus-visible{
-  outline:2px solid var(--accent); outline-offset:3px; border-radius:2px;
-}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--hot); outline-offset:3px; border-radius:2px}
+::selection{background:var(--hot); color:var(--paper)}
 
-/* ---------- header ---------- */
-.top{
-  display:flex; justify-content:space-between; align-items:baseline;
-  padding:30px 0 0; gap:20px; flex-wrap:wrap;
+/* ---------- layout: sticky identity column + scrolling content ---------- */
+.shell{
+  max-width:1180px; margin:0 auto; padding:0 40px;
+  display:grid; grid-template-columns:330px 1fr; gap:72px;
 }
-.mark{font-weight:600; letter-spacing:-.01em}
-.nav{display:flex; gap:22px; font-size:15px; color:var(--ink-2)}
-.nav a{border-bottom:1px solid transparent; padding-bottom:1px}
-.nav a:hover{color:var(--ink); border-bottom-color:var(--accent)}
+.side{
+  position:sticky; top:0; height:100vh; padding:44px 0 36px;
+  display:flex; flex-direction:column;
+}
+.content{padding:44px 0 80px; min-width:0}
+.side{overflow-y:auto; scrollbar-width:none}
+.me{width:132px; height:auto; aspect-ratio:4/5; object-fit:cover; display:block; margin:0 0 22px; background:var(--rule)}
+
+.shot{margin:34px 0 0}
+.shot img{display:block; width:100%; height:auto; aspect-ratio:1400/788; object-fit:cover; background:var(--rule)}
+.shot figcaption{margin-top:9px; font-size:13px; color:var(--ink-3)}
+
+.name{
+  font-family:var(--serif); font-weight:400; font-size:2.7rem;
+  line-height:1; letter-spacing:-.02em; margin:0 0 18px;
+}
+.name i{color:var(--hot)}
+.tags{list-style:none; margin:0 0 28px; padding:0; font-size:15px; color:var(--ink-2)}
+.tags li{padding:7px 0; border-bottom:1px solid var(--rule); display:flex; gap:12px; align-items:baseline}
+.tags li:first-child{border-top:1px solid var(--rule)}
+.tags .k{font-family:var(--mono); font-size:11px; color:var(--hot-ink); width:22px; flex:none}
+
+.nav{display:flex; flex-direction:column; gap:2px; margin:0 0 auto}
+.nav a{
+  text-decoration:none; font-size:14px; color:var(--ink-3);
+  padding:3px 0; display:flex; gap:10px; align-items:center; width:max-content;
+}
+.nav a::before{content:""; width:14px; height:1px; background:currentColor; transition:width .2s}
+.nav a:hover,.nav a.on{color:var(--ink)}
+.nav a.on::before{width:34px; background:var(--hot)}
+
+.side-foot{display:flex; flex-direction:column; gap:14px; font-size:14px}
+.chan{display:flex; gap:16px; flex-wrap:wrap}
+.chan a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+.chan a:hover{color:var(--hot-ink); border-color:var(--hot)}
 .themer{
-  background:none; border:1px solid var(--rule); color:var(--ink-2);
-  font:inherit; font-size:13px; padding:3px 11px; border-radius:999px; cursor:pointer;
+  align-self:flex-start; background:none; border:1px solid var(--rule); color:var(--ink-3);
+  font:inherit; font-family:var(--mono); font-size:11.5px; padding:4px 10px; border-radius:999px; cursor:pointer;
 }
 .themer:hover{color:var(--ink); border-color:var(--ink-3)}
 
-/* ---------- hero ---------- */
-.hero{padding:70px 0 8px}
-h1{
-  font-size:clamp(2.3rem,6.2vw,3.4rem); line-height:1.04;
-  letter-spacing:-.034em; font-weight:600; margin:0 0 20px;
+/* ---------- intro ---------- */
+.intro{
+  font-family:var(--serif); font-size:clamp(1.55rem,2.6vw,2.1rem);
+  line-height:1.28; letter-spacing:-.012em; margin:0 0 22px; max-width:28ch;
 }
-.lede{
-  font-size:clamp(1.03rem,2.3vw,1.19rem); color:var(--ink-2);
-  max-width:var(--measure); margin:0 0 14px; line-height:1.56;
+.intro em{color:var(--hot-ink)}
+.now{
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:var(--mono); font-size:12px; color:var(--ink-2);
+  border:1px solid var(--rule); border-radius:999px; padding:4px 12px 4px 10px;
 }
-.lede strong{color:var(--ink); font-weight:500}
-.where{font-size:15px; color:var(--ink-3); margin:0}
+.now::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--hot); box-shadow:0 0 0 3px var(--hot-wash)}
 
-/* ---------- waveform ---------- */
-.scope{
-  margin:46px 0 0; padding:26px 24px 20px; background:var(--raise);
-  border:1px solid var(--rule); border-radius:4px; overflow-x:auto;
-}
+/* ---------- section scaffolding ---------- */
+section{padding-top:92px; scroll-margin-top:20px}
+.sh{display:flex; align-items:baseline; gap:16px; margin:0 0 26px; padding-bottom:12px; border-bottom:1px solid var(--ink)}
+.sh .no{font-family:var(--mono); font-size:12px; color:var(--hot-ink)}
+.sh h2{font-family:var(--serif); font-weight:400; font-size:1.9rem; letter-spacing:-.015em; margin:0; line-height:1}
+.sh .aside{margin-left:auto; font-size:13px; color:var(--ink-3)}
+
+/* ---------- aegis ---------- */
+.aegis{display:grid; grid-template-columns:1fr; gap:0}
+.aegis h3{font-family:var(--serif); font-weight:500; font-size:1.5rem; margin:0 0 2px; letter-spacing:-.01em}
+.aegis .what{font-size:14px; color:var(--ink-3); margin:0 0 16px}
+.aegis p{color:var(--ink-2); max-width:64ch; margin:0 0 14px}
+.aegis p b{color:var(--ink); font-weight:500}
+.scope{margin:26px 0; padding:22px 22px 16px; background:var(--card); border:1px solid var(--rule); overflow-x:auto}
 .scope svg{display:block; width:100%; min-width:460px; height:auto}
-.scope figcaption{
-  margin-top:16px; font-size:13.5px; color:var(--ink-3);
-  line-height:1.5; max-width:62ch;
-}
-.sig{fill:none; stroke-width:1.7; stroke-linejoin:round; stroke-linecap:round}
+.scope figcaption{margin-top:12px; font-size:13px; color:var(--ink-3); max-width:62ch}
+.sig{fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round}
 .sig-clk{stroke:var(--ink-3)}
-.sig-dat{stroke:var(--accent); stroke-width:2}
+.sig-dat{stroke:var(--hot); stroke-width:2}
 .lbl{font-family:var(--mono); font-size:11px; fill:var(--ink-3)}
-.lbl-a{fill:var(--accent)}
-.meta-dash{stroke:var(--rule); stroke-width:1; stroke-dasharray:2 4}
-.flop{fill:none; stroke:var(--rule); stroke-width:1.3}
+.lbl-a{fill:var(--hot-ink)}
+.meta-dash{stroke:var(--ink-3); stroke-width:1; stroke-dasharray:2 4; opacity:.6}
 @media (prefers-reduced-motion: no-preference){
-  .draw{stroke-dasharray:1400; stroke-dashoffset:1400; animation:draw 1.5s cubic-bezier(.35,.1,.25,1) forwards}
-  .d2{animation-delay:.16s} .d3{animation-delay:.34s}
+  .draw{stroke-dasharray:1400; stroke-dashoffset:1400; animation:draw 1.6s cubic-bezier(.35,.1,.25,1) forwards}
+  .d2{animation-delay:.18s} .d3{animation-delay:.36s}
   @keyframes draw{to{stroke-dashoffset:0}}
 }
+.nums{display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin:4px 0 16px}
+.nums div{padding:14px 0}
+.nums div+div{padding-left:18px; border-left:1px solid var(--rule)}
+.nums b{display:block; font-family:var(--mono); font-weight:500; font-size:1.35rem; color:var(--ink)}
+.nums span{font-size:12.5px; color:var(--ink-3)}
+.more{font-size:14.5px; color:var(--hot-ink); text-decoration:none; border-bottom:1px solid var(--hot-wash)}
+.more:hover{border-color:var(--hot)}
+.fine{font-size:13px; color:var(--ink-3); margin-left:14px}
 
-/* ---------- sections ---------- */
-section{padding:62px 0 0}
-h2{
-  font-size:.96rem; font-weight:600; letter-spacing:-.005em;
-  margin:0 0 4px; color:var(--ink);
+/* ---------- index list (projects, papers, experience) ---------- */
+.idx{list-style:none; margin:0; padding:0}
+.idx li{
+  display:grid; grid-template-columns:1fr 150px; gap:6px 28px;
+  padding:18px 0; border-bottom:1px solid var(--rule);
 }
-.sub{font-size:14.5px; color:var(--ink-3); margin:0 0 28px}
-.hr{height:1px; background:var(--rule); border:0; margin:0 0 28px}
+.idx h4{font-size:16px; font-weight:500; margin:0 0 4px; letter-spacing:-.005em}
+.idx h4 a{text-decoration:none; border-bottom:1px solid var(--rule)}
+.idx h4 a:hover{border-color:var(--hot); color:var(--hot-ink)}
+.idx p{margin:0; font-size:14.5px; color:var(--ink-2); max-width:62ch}
+.idx .m{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); text-align:right; line-height:1.8; padding-top:2px}
+.idx .m span{display:block}
+.idx .who{font-size:13.5px; color:var(--ink-3); margin:0 0 4px}
+.idx .who b{color:var(--ink); font-weight:500}
+.sub-h{font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); margin:44px 0 4px}
 
-/* ---------- featured ---------- */
-.feat{
-  background:var(--raise); border:1px solid var(--rule);
-  border-left:3px solid var(--accent); border-radius:4px;
-  padding:30px 30px 26px;
+/* ---------- quiz ---------- */
+.two{display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start}
+.prose p{color:var(--ink-2); margin:0 0 14px; max-width:46ch}
+.prose p b{color:var(--ink); font-weight:500}
+.qcard{
+  background:var(--ink); color:var(--paper); padding:24px 24px 20px;
+  position:relative; min-height:300px; display:flex; flex-direction:column;
 }
-.feat h3{font-size:1.32rem; letter-spacing:-.022em; font-weight:600; margin:0 0 3px}
-.feat .role{font-size:14px; color:var(--ink-3); margin:0 0 18px}
-.feat p{margin:0 0 16px; color:var(--ink-2); max-width:var(--measure); font-size:16px}
-.feat p strong{color:var(--ink); font-weight:500}
-.figs{
-  display:flex; gap:34px; flex-wrap:wrap;
-  padding:18px 0 20px; margin:4px 0 18px;
-  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+.qcard .qh{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; opacity:.6; margin-bottom:16px}
+.qcard .q{font-family:var(--serif); font-size:1.24rem; line-height:1.38; margin:0 0 18px}
+.qcard .a{
+  font-size:14.5px; line-height:1.55; border-top:1px solid rgba(127,127,127,.35);
+  padding-top:14px; margin:0 0 16px; display:none;
 }
-.fig .n{font-family:var(--mono); font-size:1.5rem; font-weight:500; color:var(--accent-ink); display:block; line-height:1.15}
-.fig .k{font-size:12.5px; color:var(--ink-3); display:block; margin-top:3px}
-.links{display:flex; gap:20px; flex-wrap:wrap; font-size:14.5px}
-.links a{color:var(--accent-ink); border-bottom:1px solid var(--accent-wash); padding-bottom:1px}
-.links a:hover{border-bottom-color:var(--accent)}
-.note{font-size:13.5px; color:var(--ink-3); font-style:italic}
+.qcard .a b{color:var(--hot); font-weight:500}
+.qcard.open .a{display:block}
+.qbar{margin-top:auto; display:flex; gap:10px}
+.qbar button{
+  font:inherit; font-size:13px; cursor:pointer; border-radius:999px; padding:6px 14px;
+  border:1px solid rgba(127,127,127,.45); background:none; color:inherit;
+}
+.qbar .rev{background:var(--hot); border-color:var(--hot); color:#fff}
+.qbar button:hover{border-color:currentColor}
 
-/* ---------- ruled list ---------- */
-.list{border-top:1px solid var(--rule)}
-.row{
-  display:grid; grid-template-columns:1fr 128px; gap:10px 26px;
-  padding:22px 0; border-bottom:1px solid var(--rule); align-items:start;
-}
-.row h3{font-size:1.01rem; font-weight:500; margin:0 0 5px; letter-spacing:-.012em}
-.row p{margin:0; color:var(--ink-2); font-size:15px; max-width:60ch}
-.row .side{
-  font-family:var(--mono); font-size:12px; color:var(--ink-3);
-  text-align:right; padding-top:3px; line-height:1.7;
-}
-.row .side span{display:block}
-.row a.title{border-bottom:1px solid var(--rule)}
-.row a.title:hover{border-bottom-color:var(--accent); color:var(--accent-ink)}
-@media (max-width:620px){
-  .row{grid-template-columns:1fr}
-  .row .side{text-align:left; padding-top:7px}
-  .row .side span{display:inline; margin-right:14px}
-}
+/* ---------- run ---------- */
+.course{margin:6px 0 0; padding:24px 22px 18px; background:var(--card); border:1px solid var(--rule); overflow-x:auto}
+.course svg{display:block; width:100%; min-width:520px; height:auto}
+.course .t{font-family:var(--mono); font-size:11px; fill:var(--ink-3)}
+.course .th{fill:var(--hot-ink)}
+.course .ln{stroke:var(--ink); stroke-width:2}
+.course .tick{stroke:var(--ink-3); stroke-width:1}
+.course .wall{fill:var(--hot-wash); stroke:var(--hot); stroke-dasharray:3 3}
+.course figcaption{margin-top:10px; font-size:13px; color:var(--ink-3)}
 
-/* ---------- papers ---------- */
-.paper{padding:22px 0; border-bottom:1px solid var(--rule)}
-.paper:first-of-type{border-top:1px solid var(--rule)}
-.paper h3{font-size:1.01rem; font-weight:500; margin:0 0 5px; letter-spacing:-.012em}
-.authors{font-size:14.5px; color:var(--ink-2); margin:0 0 6px}
-.authors em{font-style:normal; color:var(--ink); font-weight:500}
-.venue{font-family:var(--mono); font-size:12.5px; color:var(--ink-3); margin:0}
-.paper p.abs{font-size:15px; color:var(--ink-2); margin:9px 0 0; max-width:var(--measure)}
+footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); font-size:13px; color:var(--ink-3); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
 
-/* ---------- contact ---------- */
-.contact{padding:60px 0 0}
-.contact p{max-width:var(--measure); color:var(--ink-2); margin:0 0 20px}
-.chan{display:flex; gap:26px; flex-wrap:wrap; font-size:15.5px}
-.chan a{color:var(--accent-ink); border-bottom:1px solid var(--accent-wash); padding-bottom:2px}
-.chan a:hover{border-bottom-color:var(--accent)}
-footer{
-  margin-top:70px; padding:22px 0 46px; border-top:1px solid var(--rule);
-  font-size:13px; color:var(--ink-3); display:flex;
-  justify-content:space-between; gap:16px; flex-wrap:wrap;
+/* ---------- small screens ---------- */
+@media (max-width:920px){
+  .shell{grid-template-columns:1fr; gap:0; padding:0 20px}
+  .side{position:static; height:auto; padding:32px 0 0}
+  .nav{flex-direction:row; flex-wrap:wrap; gap:6px 18px; margin:0 0 22px}
+  .nav a::before{display:none}
+  .side-foot{flex-direction:row; justify-content:space-between; align-items:center; flex-wrap:wrap}
+  .content{padding-top:48px}
+  section{padding-top:72px}
+  .two{grid-template-columns:1fr}
+}
+@media (max-width:920px){ .me{width:96px; margin-bottom:16px} }
+@media (max-width:560px){
+  .name{font-size:2.3rem}
+  .idx li{grid-template-columns:1fr}
+  .idx .m{text-align:left}
+  .idx .m span{display:inline; margin-right:12px}
+  .nums b{font-size:1.1rem}
+  .sh .aside{display:none}
+  .fine{display:block; margin:8px 0 0}
 }
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<div class="shell">
 
-<header class="top">
-  <span class="mark">K Hari Bhaskaran</span>
+<aside class="side">
+  <img class="me" src="img/hari.jpg" width="480" height="600" alt="Hari Bhaskaran standing outside a building on the BITS Goa campus">
+  <h1 class="name">Hari<br>Bhaskaran<i>.</i></h1>
+  <ul class="tags">
+    <li><span class="k">01</span>Chip design &amp; verification</li>
+    <li><span class="k">02</span>Quizzer · BITS Goa Quiz Club</li>
+    <li><span class="k">03</span>Training for Hyderabad</li>
+  </ul>
+
   <nav class="nav" aria-label="Sections">
-    <a href="#work">Work</a>
-    <a href="#research">Research</a>
-    <a href="#experience">Experience</a>
-    <a href="#contact">Contact</a>
-    <button class="themer" id="themer" type="button" aria-label="Switch colour theme">Theme</button>
+    <a href="#silicon">Silicon</a>
+    <a href="#quiz">Quizzing</a>
+    <a href="#run">Running</a>
+    <a href="#elsewhere">Experience</a>
   </nav>
-</header>
 
-<main>
-
-<div class="hero">
-  <h1>Correctness under constraint.</h1>
-  <p class="lede">I work on RTL design, functional verification and the tooling in between — currently building <strong>Aegis</strong>, an open-source timing-closure tool that refuses to touch a synchronizer it cannot prove safe.</p>
-  <p class="where">B.E. (Hons.) Electronics &amp; Instrumentation, BITS Pilani Goa · graduating 2027</p>
-
-  <figure class="scope">
-    <svg viewBox="0 0 700 170" role="img" aria-labelledby="wt">
-      <title id="wt">A signal crossing from one clock domain into another through a two-flop synchronizer</title>
-
-      <text class="lbl" x="0" y="26">clk_a</text>
-      <path class="sig sig-clk draw" d="M52 30 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18"/>
-
-      <text class="lbl lbl-a" x="0" y="76">dat_a</text>
-      <path class="sig sig-dat draw d2" d="M52 80 h88 v-18 h178 v18 h340"/>
-
-      <text class="lbl" x="0" y="126">clk_b</text>
-      <path class="sig sig-clk draw d3" d="M52 130 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h40"/>
-
-      <line class="meta-dash" x1="140" y1="40" x2="140" y2="150"/>
-      <line class="meta-dash" x1="318" y1="40" x2="318" y2="150"/>
-      <text class="lbl" x="128" y="158">launch</text>
-      <text class="lbl" x="306" y="158">?</text>
-    </svg>
-    <figcaption>A data signal launched on <code>clk_a</code> and sampled on an unrelated <code>clk_b</code> can settle anywhere. Formal equivalence checking will not catch it, because equivalence checkers do not model metastability. Only structure will.</figcaption>
-  </figure>
-</div>
-
-<section id="work">
-  <h2>Selected work</h2>
-  <p class="sub">Open source unless noted</p>
-  <hr class="hr">
-
-  <article class="feat">
-    <h3>Aegis</h3>
-    <p class="role">Automated RTL timing closure with CDC guardrails</p>
-
-    <p>An LLM proposes timing rewrites; nothing it writes is trusted. Yosys and OpenSTA set the baseline, Yosys EQY gates every candidate on sequential equivalence, and a structural pre-pass classifies <strong>synchronizer chains, Gray-coded pointers, reset crossings and clock dividers</strong> into immutable tiers before generation begins. Candidates that touch a locked region are rejected on a checksum rather than scored.</p>
-
-    <p>The premise is that equivalence checking is necessary but not sufficient across clock domains. Multi-clock safety has to be enforced on structure, upstream of the model, because no downstream check can see metastability.</p>
-
-    <div class="figs">
-      <div class="fig"><span class="n">4 → 53%</span><span class="k">SEC candidate pass rate</span></div>
-      <div class="fig"><span class="n">0</span><span class="k">lock violations</span></div>
-      <div class="fig"><span class="n">40+</span><span class="k">designs characterised</span></div>
+  <div class="side-foot">
+    <div class="chan">
+      <a href="mailto:f20230822@goa.bits-pilani.ac.in">Email</a>
+      <a href="https://github.com/harrybhasky">GitHub</a>
+      <a href="https://www.linkedin.com/in/hari-bhaskaran-k-584450290/">LinkedIn</a>
     </div>
-
-    <div class="links">
-      <a href="https://github.com/harrybhasky/aegis">Repository</a>
-      <span class="note">Manuscript in preparation. Reports include runs that regressed.</span>
-    </div>
-  </article>
-
-  <div class="list" style="margin-top:34px">
-
-    <div class="row">
-      <div>
-        <h3>Systolic array CNN accelerator</h3>
-        <p>A 4×4 output-stationary array across 16 DSP48 slices doing INT8 multiply with INT32 accumulation, integrated as an AXI4-Lite peripheral on Zynq-7000 with the host-side im2col, DMA and build flow underneath it.</p>
-      </div>
-      <div class="side"><span>Verilog · Vivado</span><span>2024–25</span></div>
-    </div>
-
-    <div class="row">
-      <div>
-        <h3>Multi-metric kNN accelerator</h3>
-        <p>Four distance metrics sharing one ALU with zero-cycle mode switching, normalisation moved off the critical path, and a pipelined top-K sorter. 2.1× over a CPU baseline on Artix-7.</p>
-      </div>
-      <div class="side"><span>Verilog · Artix-7</span><span>2025</span></div>
-    </div>
-
-    <div class="row">
-      <div>
-        <h3>FIFO verification environment</h3>
-        <p>Golden reference model, automated scoreboard, SVA protocol assertions, and eight directed tests for reset, overflow, underflow and pointer wrap-around, closed out with a constrained-random regression against a functional coverage model.</p>
-      </div>
-      <div class="side"><span>SystemVerilog</span><span>2025</span></div>
-    </div>
-
-    <div class="row">
-      <div>
-        <h3><a class="title" href="https://github.com/vicharak-in/Gati">Gati — upstream contribution</a></h3>
-        <p>Three classes of defect in the test infrastructure of an FPGA inference accelerator: a width mismatch truncating stimulus silently, a non-blocking assignment racing in combinational logic, and a reset-release bug hiding real failures. Reviewed and merged.</p>
-      </div>
-      <div class="side"><span>Vicharak</span><span>2026–</span></div>
-    </div>
-
-    <div class="row">
-      <div>
-        <h3>RailOps AI</h3>
-        <p>Rail sensor telemetry streamed through Kafka into a model predicting failure risk and remaining useful life, with automated dispatch and a live dashboard. Built in four weeks with a team of four.</p>
-      </div>
-      <div class="side"><span>1st runner-up / 97</span><span>2026</span></div>
-    </div>
-
-    <div class="row">
-      <div>
-        <h3>32-bit single-cycle RISC processor</h3>
-        <p>MIPS-style core covering 20+ instructions — decode, ALU datapath, FSM control and memory interface — verified by directed simulation across arithmetic, branch and memory paths.</p>
-      </div>
-      <div class="side"><span>Verilog</span><span>2024</span></div>
-    </div>
-
+    <button class="themer" id="themer" type="button" aria-label="Switch colour theme">light / dark</button>
   </div>
-</section>
+</aside>
 
-<section id="research">
-  <h2>Research</h2>
-  <p class="sub">Hardware acceleration and EDA automation</p>
-  <hr class="hr">
+<main class="content">
 
-  <article class="paper">
-    <h3>Multi-Metric kNN Hardware Accelerator on FPGA</h3>
-    <p class="authors"><em>K. Hari Bhaskaran</em>, D. Pal</p>
-    <p class="venue">Submitted · VLSID 2027</p>
-    <p class="abs">A single resource-shared ALU serving four distance metrics with zero-cycle switching between them, pre-normalisation lifted off the critical path, and a pipelined top-K sorter. 2.1× speedup over a CPU software baseline.</p>
-  </article>
+  <p class="intro">I design and verify digital hardware at BITS Pilani Goa. When I'm not reading waveforms I'm <em>writing quiz questions</em> or out on a long run.</p>
+  <span class="now">Looking for 2027 silicon internships — RTL, DV, EDA</span>
 
-  <article class="paper">
-    <h3>Structural guardrails for model-proposed RTL transformation</h3>
-    <p class="authors"><em>K. Hari Bhaskaran</em></p>
-    <p class="venue">Manuscript in preparation</p>
-    <p class="abs">Argues that sequential equivalence checking cannot certify a multi-clock edit, since neither SEC nor simulation models metastability, and that safety must therefore be enforced structurally before generation rather than filtered afterwards.</p>
-  </article>
-</section>
+  <!-- ===================== SILICON ===================== -->
+  <section id="silicon">
+    <div class="sh"><span class="no">01</span><h2>Silicon</h2><span class="aside">B.E. Electronics &amp; Instrumentation, '27</span></div>
 
-<section id="experience">
-  <h2>Experience</h2>
-  <p class="sub">Research and engineering</p>
-  <hr class="hr">
+    <div class="aegis">
+      <h3>Aegis</h3>
+      <p class="what">Open-source RTL timing closure that won't touch a synchronizer it can't prove safe</p>
 
-  <div class="list">
-    <div class="row">
-      <div>
-        <h3>Open-source contributor — Vicharak</h3>
-        <p>RTL and verification infrastructure on Gati, an FPGA DNN inference accelerator.</p>
+      <p>An LLM suggests timing fixes, and Aegis doesn't trust any of them. Yosys and OpenSTA give the baseline, Yosys EQY checks every candidate for sequential equivalence, and a structural pass runs first. It finds <b>synchronizer chains, Gray-coded pointers, reset crossings and clock dividers</b> and locks them before the model sees anything. If a candidate edits a locked region, its checksum fails and it gets thrown out.</p>
+
+      <figure class="scope">
+        <svg viewBox="0 0 700 170" role="img" aria-labelledby="wt">
+          <title id="wt">A signal crossing from one clock domain into another</title>
+          <text class="lbl" x="0" y="26">clk_a</text>
+          <path class="sig sig-clk draw" d="M52 30 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18"/>
+          <text class="lbl lbl-a" x="0" y="76">dat_a</text>
+          <path class="sig sig-dat draw d2" d="M52 80 h88 v-18 h178 v18 h340"/>
+          <text class="lbl" x="0" y="126">clk_b</text>
+          <path class="sig sig-clk draw d3" d="M52 130 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h40"/>
+          <line class="meta-dash" x1="140" y1="40" x2="140" y2="150"/>
+          <line class="meta-dash" x1="318" y1="40" x2="318" y2="150"/>
+          <text class="lbl" x="128" y="158">launch</text>
+          <text class="lbl lbl-a" x="314" y="158">?</text>
+        </svg>
+        <figcaption>Data launched on <code>clk_a</code> and sampled on an unrelated <code>clk_b</code> can settle to either value. Equivalence checkers don't model metastability, so they can't catch this. You have to catch it from the circuit's structure.</figcaption>
+      </figure>
+
+      <div class="nums">
+        <div><b>4 → 53%</b><span>SEC pass rate</span></div>
+        <div><b>0</b><span>lock violations</span></div>
+        <div><b>40+</b><span>designs run</span></div>
       </div>
-      <div class="side"><span>Jan 2026 —</span></div>
+      <a class="more" href="https://github.com/harrybhasky/aegis">github.com/harrybhasky/aegis →</a>
+      <span class="fine">Paper in progress. Reports include the runs that got worse.</span>
     </div>
-    <div class="row">
-      <div>
-        <h3>Undergraduate researcher — BITS Pilani Goa</h3>
-        <p>Accelerator micro-architecture under Prof. Vipin Kizheppatt. Systolic array design, SoC integration and the kNN accelerator.</p>
-      </div>
-      <div class="side"><span>Jan 2024 — May 2025</span></div>
-    </div>
-    <div class="row">
-      <div>
-        <h3>Embedded intern — C-DAC, Government of India</h3>
-        <p>A CNN pipeline with unsupervised feature extraction over time-series telemetry, profiled and compressed for edge deployment. Hyderabad.</p>
-      </div>
-      <div class="side"><span>May — Aug 2025</span></div>
-    </div>
-  </div>
-</section>
 
-<section class="contact" id="contact">
-  <h2>Contact</h2>
-  <hr class="hr" style="margin-top:12px">
-  <p>I'm looking for silicon internships for 2027 — RTL design, verification, or EDA infrastructure. Happy to talk about any of the work above, particularly if you disagree with the guardrail premise.</p>
-  <div class="chan">
-    <a href="mailto:f20230822@goa.bits-pilani.ac.in">f20230822@goa.bits-pilani.ac.in</a>
-    <a href="https://github.com/harrybhasky">GitHub</a>
-    <a href="https://www.linkedin.com/in/hari-bhaskaran-k-584450290/">LinkedIn</a>
-  </div>
-</section>
+    <p class="sub-h">Other builds</p>
+    <ul class="idx">
+      <li>
+        <div><h4>Systolic array CNN accelerator</h4>
+        <p>4×4 output-stationary array on 16 DSP48s (INT8 multiply, INT32 accumulate), wrapped as an AXI4-Lite peripheral on Zynq-7000 with host-side im2col and DMA.</p></div>
+        <div class="m"><span>Verilog · Vivado</span><span>2024–25</span></div>
+      </li>
+      <li>
+        <div><h4>Multi-metric kNN accelerator</h4>
+        <p>Four distance metrics share one ALU and switch with no cycle penalty, followed by a pipelined top-K sorter. 2.1× faster than a CPU on Artix-7.</p></div>
+        <div class="m"><span>Verilog · Artix-7</span><span>2025</span></div>
+      </li>
+      <li>
+        <div><h4>FIFO verification environment</h4>
+        <p>Reference model, scoreboard, SVA assertions, directed tests for reset, overflow, underflow and wrap-around, then constrained-random runs until the coverage model was closed.</p></div>
+        <div class="m"><span>SystemVerilog</span><span>2025</span></div>
+      </li>
+      <li>
+        <div><h4><a href="https://github.com/vicharak-in/Gati">Gati, upstream fixes</a></h4>
+        <p>Fixed three test-infrastructure bugs in an FPGA inference accelerator: silent stimulus truncation, a non-blocking assignment race, and a reset bug that hid real failures. All merged.</p></div>
+        <div class="m"><span>Vicharak</span><span>2026–</span></div>
+      </li>
+      <li>
+        <div><h4>RailOps AI</h4>
+        <p>Rail sensor data streamed through Kafka into a model that predicts failure risk and remaining useful life, with a live dashboard. Built in four weeks by a team of four.</p></div>
+        <div class="m"><span>2nd of 97</span><span>2026</span></div>
+      </li>
+      <li>
+        <div><h4>32-bit single-cycle RISC core</h4>
+        <p>MIPS-style core supporting 20+ instructions, verified with directed tests on arithmetic, branch and memory paths.</p></div>
+        <div class="m"><span>Verilog</span><span>2024</span></div>
+      </li>
+    </ul>
+
+    <p class="sub-h">Papers</p>
+    <ul class="idx">
+      <li>
+        <div><h4>Multi-Metric kNN Hardware Accelerator on FPGA</h4>
+        <p class="who"><b>K. Hari Bhaskaran</b>, D. Pal</p></div>
+        <div class="m"><span>VLSID 2027</span><span>submitted</span></div>
+      </li>
+      <li>
+        <div><h4>Structural guardrails for model-proposed RTL transformation</h4>
+        <p class="who"><b>K. Hari Bhaskaran</b></p></div>
+        <div class="m"><span>in preparation</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section id="quiz">
+    <div class="sh"><span class="no">02</span><h2>Quizzing</h2><span class="aside">Coordinator, BITS Goa Quiz Club</span></div>
+
+    <div class="two">
+      <div class="prose">
+        <p>I'm a competitive quizzer and I coordinate the <b>BITS Goa Quiz Club</b>. In practice that means writing questions, hosting quizzes on campus, and taking a team to quizzes off campus.</p>
+        <p>A good question works like a good testbench. You can't guess it, but you can work it out from what you already know.</p>
+        <p>Here are a few I like. Try them before you hit reveal.</p>
+      </div>
+
+      <div class="qcard" id="qcard" aria-live="polite">
+        <div class="qh"><span id="qn">Q1 / 3</span><span id="qt">connect</span></div>
+        <p class="q" id="qq"></p>
+        <p class="a" id="qa"></p>
+        <div class="qbar">
+          <button class="rev" id="qrev" type="button">Reveal</button>
+          <button id="qnext" type="button">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <figure class="shot">
+      <img src="img/quiz.jpg" width="1400" height="788" loading="lazy" alt="Quizzers seated in a lecture hall, concentrating on a question">
+      <figcaption>Quiz in a lecture hall at BITS Goa.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== RUN ===================== -->
+  <section id="run">
+    <div class="sh"><span class="no">03</span><h2>Running</h2><span class="aside">Hyderabad Marathon</span></div>
+
+    <div class="prose"><p>I'm training for the <b>Hyderabad Marathon</b>: 42.195 km, building mileage week by week. Planning a training block is a lot like timing closure. Find what's slowing you down, fix that, and don't break anything else.</p></div>
+
+    <figure class="course">
+      <svg viewBox="0 0 700 120" role="img" aria-labelledby="ct">
+        <title id="ct">The marathon distance with markers at 5, 10, 21.1, 30 and 42.195 km, and the wall marked around 30 to 35 km</title>
+        <rect class="wall" x="485" y="34" width="76" height="34"/>
+        <text class="t th" x="494" y="26">the wall</text>
+        <line class="ln" x1="30" y1="51" x2="670" y2="51"/>
+        <!-- scale: 640px / 42.195km ≈ 15.17 px/km -->
+        <line class="tick" x1="30"  y1="43" x2="30"  y2="59"/><text class="t" x="24"  y="84">0</text>
+        <line class="tick" x1="106" y1="43" x2="106" y2="59"/><text class="t" x="102" y="84">5</text>
+        <line class="tick" x1="182" y1="43" x2="182" y2="59"/><text class="t" x="174" y="84">10</text>
+        <line class="tick" x1="350" y1="43" x2="350" y2="59"/><text class="t" x="336" y="84">21.1</text><text class="t" x="330" y="102">halfway</text>
+        <line class="tick" x1="485" y1="43" x2="485" y2="59"/><text class="t" x="477" y="84">30</text>
+        <circle cx="670" cy="51" r="5" fill="var(--hot)"/><text class="t th" x="626" y="84">42.195</text><text class="t" x="646" y="102">finish</text>
+      </svg>
+      <figcaption>Most people hit the wall somewhere between 30 and 35 km.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== EXPERIENCE ===================== -->
+  <section id="elsewhere">
+    <div class="sh"><span class="no">04</span><h2>Experience</h2></div>
+    <ul class="idx">
+      <li>
+        <div><h4>Open-source contributor, Vicharak</h4>
+        <p>RTL and verification infrastructure for Gati, an FPGA DNN inference accelerator.</p></div>
+        <div class="m"><span>Jan 2026 —</span></div>
+      </li>
+      <li>
+        <div><h4>Embedded intern, C-DAC Hyderabad</h4>
+        <p>CNN pipeline with unsupervised feature extraction on time-series telemetry, profiled and compressed to run on edge hardware.</p></div>
+        <div class="m"><span>May — Aug 2025</span></div>
+      </li>
+      <li>
+        <div><h4>Undergraduate researcher, BITS Pilani Goa</h4>
+        <p>Accelerator micro-architecture with Prof. Vipin Kizheppatt: systolic arrays, SoC integration, and the kNN accelerator.</p></div>
+        <div class="m"><span>Jan 2024 — May 2025</span></div>
+      </li>
+    </ul>
+
+    <footer>
+      <span>Hari Bhaskaran · Goa</span>
+      <a href="mailto:f20230822@goa.bits-pilani.ac.in">f20230822@goa.bits-pilani.ac.in</a>
+    </footer>
+  </section>
 
 </main>
-
-<footer>
-  <span>K Hari Bhaskaran — Goa, India</span>
-  <span>Built by hand</span>
-</footer>
-
 </div>
 
 <script>
+/* theme */
 (function(){
-  var btn = document.getElementById('themer');
-  var root = document.documentElement;
-  var stored = null;
+  var btn = document.getElementById('themer'), root = document.documentElement, stored = null;
   try { stored = localStorage.getItem('theme'); } catch(e) {}
   if (stored === 'light' || stored === 'dark') root.setAttribute('data-theme', stored);
   btn.addEventListener('click', function(){
     var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var now = root.getAttribute('data-theme') || (dark ? 'dark' : 'light');
-    var next = now === 'dark' ? 'light' : 'dark';
+    var next = (root.getAttribute('data-theme') || (dark ? 'dark' : 'light')) === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('theme', next); } catch(e) {}
   });
 })();
-</script>
 
+/* quiz card — add questions to this list */
+(function(){
+  var Q = [
+    { t:'identify',
+      q:'Aegis has to recognise FIFO pointers that use a binary code where consecutive values differ by exactly one bit. It\'s named after a Bell Labs physicist whose 1953 patent used it in pulse-code modulation. Name the code.',
+      a:'<b>Gray code</b>, after Frank Gray. Because only one bit changes at a time, a pointer can cross a clock domain without being sampled halfway through a change.' },
+    { t:'connect',
+      q:'Since 1983, runners have raced 246 km from Athens to Sparta in under 36 hours. They\'re following the route of a messenger Herodotus wrote about. A later version of his story gave a different, shorter race its name. Who was he?',
+      a:'<b>Pheidippides</b>. The race is the Spartathlon. The story of him running from Marathon to Athens came later, and the modern marathon was named after it.' },
+    { t:'why',
+      q:'Why is a marathon 42.195 km and not a round 42? Hint: London, 1908.',
+      a:'The <b>1908 London Olympic</b> course started at Windsor Castle and finished in front of the royal box at White City stadium. That distance became the official standard in 1921.' }
+  ];
+  var i = 0, card = document.getElementById('qcard');
+  function show(){
+    document.getElementById('qn').textContent = 'Q' + (i+1) + ' / ' + Q.length;
+    document.getElementById('qt').textContent = Q[i].t;
+    document.getElementById('qq').textContent = Q[i].q;
+    document.getElementById('qa').innerHTML = Q[i].a;
+    card.classList.remove('open');
+    document.getElementById('qrev').textContent = 'Reveal';
+  }
+  document.getElementById('qrev').addEventListener('click', function(){
+    var open = card.classList.toggle('open');
+    this.textContent = open ? 'Hide' : 'Reveal';
+  });
+  document.getElementById('qnext').addEventListener('click', function(){ i = (i+1) % Q.length; show(); });
+  show();
+})();
+
+/* highlight current section in the side nav */
+(function(){
+  var links = document.querySelectorAll('.nav a');
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(l){ l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id); });
+    });
+  }, { rootMargin:'-40% 0px -55% 0px' });
+  document.querySelectorAll('main section').forEach(function(s){ io.observe(s); });
+})();
+</script>
 </body>
 </html>
