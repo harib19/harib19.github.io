@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>K Hari Bhaskaran — RTL design, verification, EDA tooling</title>
+<meta name="description" content="Undergraduate researcher working on RTL design, functional verification and EDA infrastructure. Building Aegis, an open-source timing-closure tool with CDC guardrails.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#F2F3F0;
+  --raise:#FFFFFF;
+  --ink:#14181A;
+  --ink-2:#4E5853;
+  --ink-3:#7C8781;
+  --rule:#D5D9D3;
+  --accent:#0F6B55;
+  --accent-ink:#0B4F3F;
+  --accent-wash:rgba(15,107,85,.07);
+  --warn:#8A5A1B;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --measure:66ch;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#0E110F;
+    --raise:#151916;
+    --ink:#E7EAE5;
+    --ink-2:#9BA49D;
+    --ink-3:#6E7872;
+    --rule:#242A26;
+    --accent:#45C79A;
+    --accent-ink:#6FDCB5;
+    --accent-wash:rgba(69,199,154,.09);
+    --warn:#D0A24E;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#0E110F; --raise:#151916; --ink:#E7EAE5; --ink-2:#9BA49D;
+  --ink-3:#6E7872; --rule:#242A26; --accent:#45C79A; --accent-ink:#6FDCB5;
+  --accent-wash:rgba(69,199,154,.09); --warn:#D0A24E;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:calc(env(safe-area-inset-top,0px) + 2rem)}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:17px; line-height:1.62;
+  font-weight:400; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px; margin:0 auto; padding:0 28px}
+a{color:inherit; text-decoration:none}
+a:focus-visible,button:focus-visible{
+  outline:2px solid var(--accent); outline-offset:3px; border-radius:2px;
+}
+
+/* ---------- header ---------- */
+.top{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:30px 0 0; gap:20px; flex-wrap:wrap;
+}
+.mark{font-weight:600; letter-spacing:-.01em}
+.nav{display:flex; gap:22px; font-size:15px; color:var(--ink-2)}
+.nav a{border-bottom:1px solid transparent; padding-bottom:1px}
+.nav a:hover{color:var(--ink); border-bottom-color:var(--accent)}
+.themer{
+  background:none; border:1px solid var(--rule); color:var(--ink-2);
+  font:inherit; font-size:13px; padding:3px 11px; border-radius:999px; cursor:pointer;
+}
+.themer:hover{color:var(--ink); border-color:var(--ink-3)}
+
+/* ---------- hero ---------- */
+.hero{padding:70px 0 8px}
+h1{
+  font-size:clamp(2.3rem,6.2vw,3.4rem); line-height:1.04;
+  letter-spacing:-.034em; font-weight:600; margin:0 0 20px;
+}
+.lede{
+  font-size:clamp(1.03rem,2.3vw,1.19rem); color:var(--ink-2);
+  max-width:var(--measure); margin:0 0 14px; line-height:1.56;
+}
+.lede strong{color:var(--ink); font-weight:500}
+.where{font-size:15px; color:var(--ink-3); margin:0}
+
+/* ---------- waveform ---------- */
+.scope{
+  margin:46px 0 0; padding:26px 24px 20px; background:var(--raise);
+  border:1px solid var(--rule); border-radius:4px; overflow-x:auto;
+}
+.scope svg{display:block; width:100%; min-width:460px; height:auto}
+.scope figcaption{
+  margin-top:16px; font-size:13.5px; color:var(--ink-3);
+  line-height:1.5; max-width:62ch;
+}
+.sig{fill:none; stroke-width:1.7; stroke-linejoin:round; stroke-linecap:round}
+.sig-clk{stroke:var(--ink-3)}
+.sig-dat{stroke:var(--accent); stroke-width:2}
+.lbl{font-family:var(--mono); font-size:11px; fill:var(--ink-3)}
+.lbl-a{fill:var(--accent)}
+.meta-dash{stroke:var(--rule); stroke-width:1; stroke-dasharray:2 4}
+.flop{fill:none; stroke:var(--rule); stroke-width:1.3}
+@media (prefers-reduced-motion: no-preference){
+  .draw{stroke-dasharray:1400; stroke-dashoffset:1400; animation:draw 1.5s cubic-bezier(.35,.1,.25,1) forwards}
+  .d2{animation-delay:.16s} .d3{animation-delay:.34s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+}
+
+/* ---------- sections ---------- */
+section{padding:62px 0 0}
+h2{
+  font-size:.96rem; font-weight:600; letter-spacing:-.005em;
+  margin:0 0 4px; color:var(--ink);
+}
+.sub{font-size:14.5px; color:var(--ink-3); margin:0 0 28px}
+.hr{height:1px; background:var(--rule); border:0; margin:0 0 28px}
+
+/* ---------- featured ---------- */
+.feat{
+  background:var(--raise); border:1px solid var(--rule);
+  border-left:3px solid var(--accent); border-radius:4px;
+  padding:30px 30px 26px;
+}
+.feat h3{font-size:1.32rem; letter-spacing:-.022em; font-weight:600; margin:0 0 3px}
+.feat .role{font-size:14px; color:var(--ink-3); margin:0 0 18px}
+.feat p{margin:0 0 16px; color:var(--ink-2); max-width:var(--measure); font-size:16px}
+.feat p strong{color:var(--ink); font-weight:500}
+.figs{
+  display:flex; gap:34px; flex-wrap:wrap;
+  padding:18px 0 20px; margin:4px 0 18px;
+  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+}
+.fig .n{font-family:var(--mono); font-size:1.5rem; font-weight:500; color:var(--accent-ink); display:block; line-height:1.15}
+.fig .k{font-size:12.5px; color:var(--ink-3); display:block; margin-top:3px}
+.links{display:flex; gap:20px; flex-wrap:wrap; font-size:14.5px}
+.links a{color:var(--accent-ink); border-bottom:1px solid var(--accent-wash); padding-bottom:1px}
+.links a:hover{border-bottom-color:var(--accent)}
+.note{font-size:13.5px; color:var(--ink-3); font-style:italic}
+
+/* ---------- ruled list ---------- */
+.list{border-top:1px solid var(--rule)}
+.row{
+  display:grid; grid-template-columns:1fr 128px; gap:10px 26px;
+  padding:22px 0; border-bottom:1px solid var(--rule); align-items:start;
+}
+.row h3{font-size:1.01rem; font-weight:500; margin:0 0 5px; letter-spacing:-.012em}
+.row p{margin:0; color:var(--ink-2); font-size:15px; max-width:60ch}
+.row .side{
+  font-family:var(--mono); font-size:12px; color:var(--ink-3);
+  text-align:right; padding-top:3px; line-height:1.7;
+}
+.row .side span{display:block}
+.row a.title{border-bottom:1px solid var(--rule)}
+.row a.title:hover{border-bottom-color:var(--accent); color:var(--accent-ink)}
+@media (max-width:620px){
+  .row{grid-template-columns:1fr}
+  .row .side{text-align:left; padding-top:7px}
+  .row .side span{display:inline; margin-right:14px}
+}
+
+/* ---------- papers ---------- */
+.paper{padding:22px 0; border-bottom:1px solid var(--rule)}
+.paper:first-of-type{border-top:1px solid var(--rule)}
+.paper h3{font-size:1.01rem; font-weight:500; margin:0 0 5px; letter-spacing:-.012em}
+.authors{font-size:14.5px; color:var(--ink-2); margin:0 0 6px}
+.authors em{font-style:normal; color:var(--ink); font-weight:500}
+.venue{font-family:var(--mono); font-size:12.5px; color:var(--ink-3); margin:0}
+.paper p.abs{font-size:15px; color:var(--ink-2); margin:9px 0 0; max-width:var(--measure)}
+
+/* ---------- contact ---------- */
+.contact{padding:60px 0 0}
+.contact p{max-width:var(--measure); color:var(--ink-2); margin:0 0 20px}
+.chan{display:flex; gap:26px; flex-wrap:wrap; font-size:15.5px}
+.chan a{color:var(--accent-ink); border-bottom:1px solid var(--accent-wash); padding-bottom:2px}
+.chan a:hover{border-bottom-color:var(--accent)}
+footer{
+  margin-top:70px; padding:22px 0 46px; border-top:1px solid var(--rule);
+  font-size:13px; color:var(--ink-3); display:flex;
+  justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="top">
+  <span class="mark">K Hari Bhaskaran</span>
+  <nav class="nav" aria-label="Sections">
+    <a href="#work">Work</a>
+    <a href="#research">Research</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+    <button class="themer" id="themer" type="button" aria-label="Switch colour theme">Theme</button>
+  </nav>
+</header>
+
+<main>
+
+<div class="hero">
+  <h1>Correctness under constraint.</h1>
+  <p class="lede">I work on RTL design, functional verification and the tooling in between — currently building <strong>Aegis</strong>, an open-source timing-closure tool that refuses to touch a synchronizer it cannot prove safe.</p>
+  <p class="where">B.E. (Hons.) Electronics &amp; Instrumentation, BITS Pilani Goa · graduating 2027</p>
+
+  <figure class="scope">
+    <svg viewBox="0 0 700 170" role="img" aria-labelledby="wt">
+      <title id="wt">A signal crossing from one clock domain into another through a two-flop synchronizer</title>
+
+      <text class="lbl" x="0" y="26">clk_a</text>
+      <path class="sig sig-clk draw" d="M52 30 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18 v-14 h18 v14 h18"/>
+
+      <text class="lbl lbl-a" x="0" y="76">dat_a</text>
+      <path class="sig sig-dat draw d2" d="M52 80 h88 v-18 h178 v18 h340"/>
+
+      <text class="lbl" x="0" y="126">clk_b</text>
+      <path class="sig sig-clk draw d3" d="M52 130 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h26 v-14 h26 v14 h40"/>
+
+      <line class="meta-dash" x1="140" y1="40" x2="140" y2="150"/>
+      <line class="meta-dash" x1="318" y1="40" x2="318" y2="150"/>
+      <text class="lbl" x="128" y="158">launch</text>
+      <text class="lbl" x="306" y="158">?</text>
+    </svg>
+    <figcaption>A data signal launched on <code>clk_a</code> and sampled on an unrelated <code>clk_b</code> can settle anywhere. Formal equivalence checking will not catch it, because equivalence checkers do not model metastability. Only structure will.</figcaption>
+  </figure>
+</div>
+
+<section id="work">
+  <h2>Selected work</h2>
+  <p class="sub">Open source unless noted</p>
+  <hr class="hr">
+
+  <article class="feat">
+    <h3>Aegis</h3>
+    <p class="role">Automated RTL timing closure with CDC guardrails</p>
+
+    <p>An LLM proposes timing rewrites; nothing it writes is trusted. Yosys and OpenSTA set the baseline, Yosys EQY gates every candidate on sequential equivalence, and a structural pre-pass classifies <strong>synchronizer chains, Gray-coded pointers, reset crossings and clock dividers</strong> into immutable tiers before generation begins. Candidates that touch a locked region are rejected on a checksum rather than scored.</p>
+
+    <p>The premise is that equivalence checking is necessary but not sufficient across clock domains. Multi-clock safety has to be enforced on structure, upstream of the model, because no downstream check can see metastability.</p>
+
+    <div class="figs">
+      <div class="fig"><span class="n">4 → 53%</span><span class="k">SEC candidate pass rate</span></div>
+      <div class="fig"><span class="n">0</span><span class="k">lock violations</span></div>
+      <div class="fig"><span class="n">40+</span><span class="k">designs characterised</span></div>
+    </div>
+
+    <div class="links">
+      <a href="https://github.com/harrybhasky/aegis">Repository</a>
+      <span class="note">Manuscript in preparation. Reports include runs that regressed.</span>
+    </div>
+  </article>
+
+  <div class="list" style="margin-top:34px">
+
+    <div class="row">
+      <div>
+        <h3>Systolic array CNN accelerator</h3>
+        <p>A 4×4 output-stationary array across 16 DSP48 slices doing INT8 multiply with INT32 accumulation, integrated as an AXI4-Lite peripheral on Zynq-7000 with the host-side im2col, DMA and build flow underneath it.</p>
+      </div>
+      <div class="side"><span>Verilog · Vivado</span><span>2024–25</span></div>
+    </div>
+
+    <div class="row">
+      <div>
+        <h3>Multi-metric kNN accelerator</h3>
+        <p>Four distance metrics sharing one ALU with zero-cycle mode switching, normalisation moved off the critical path, and a pipelined top-K sorter. 2.1× over a CPU baseline on Artix-7.</p>
+      </div>
+      <div class="side"><span>Verilog · Artix-7</span><span>2025</span></div>
+    </div>
+
+    <div class="row">
+      <div>
+        <h3>FIFO verification environment</h3>
+        <p>Golden reference model, automated scoreboard, SVA protocol assertions, and eight directed tests for reset, overflow, underflow and pointer wrap-around, closed out with a constrained-random regression against a functional coverage model.</p>
+      </div>
+      <div class="side"><span>SystemVerilog</span><span>2025</span></div>
+    </div>
+
+    <div class="row">
+      <div>
+        <h3><a class="title" href="https://github.com/vicharak-in/Gati">Gati — upstream contribution</a></h3>
+        <p>Three classes of defect in the test infrastructure of an FPGA inference accelerator: a width mismatch truncating stimulus silently, a non-blocking assignment racing in combinational logic, and a reset-release bug hiding real failures. Reviewed and merged.</p>
+      </div>
+      <div class="side"><span>Vicharak</span><span>2026–</span></div>
+    </div>
+
+    <div class="row">
+      <div>
+        <h3>RailOps AI</h3>
+        <p>Rail sensor telemetry streamed through Kafka into a model predicting failure risk and remaining useful life, with automated dispatch and a live dashboard. Built in four weeks with a team of four.</p>
+      </div>
+      <div class="side"><span>1st runner-up / 97</span><span>2026</span></div>
+    </div>
+
+    <div class="row">
+      <div>
+        <h3>32-bit single-cycle RISC processor</h3>
+        <p>MIPS-style core covering 20+ instructions — decode, ALU datapath, FSM control and memory interface — verified by directed simulation across arithmetic, branch and memory paths.</p>
+      </div>
+      <div class="side"><span>Verilog</span><span>2024</span></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="research">
+  <h2>Research</h2>
+  <p class="sub">Hardware acceleration and EDA automation</p>
+  <hr class="hr">
+
+  <article class="paper">
+    <h3>Multi-Metric kNN Hardware Accelerator on FPGA</h3>
+    <p class="authors"><em>K. Hari Bhaskaran</em>, D. Pal</p>
+    <p class="venue">Submitted · VLSID 2027</p>
+    <p class="abs">A single resource-shared ALU serving four distance metrics with zero-cycle switching between them, pre-normalisation lifted off the critical path, and a pipelined top-K sorter. 2.1× speedup over a CPU software baseline.</p>
+  </article>
+
+  <article class="paper">
+    <h3>Structural guardrails for model-proposed RTL transformation</h3>
+    <p class="authors"><em>K. Hari Bhaskaran</em></p>
+    <p class="venue">Manuscript in preparation</p>
+    <p class="abs">Argues that sequential equivalence checking cannot certify a multi-clock edit, since neither SEC nor simulation models metastability, and that safety must therefore be enforced structurally before generation rather than filtered afterwards.</p>
+  </article>
+</section>
+
+<section id="experience">
+  <h2>Experience</h2>
+  <p class="sub">Research and engineering</p>
+  <hr class="hr">
+
+  <div class="list">
+    <div class="row">
+      <div>
+        <h3>Open-source contributor — Vicharak</h3>
+        <p>RTL and verification infrastructure on Gati, an FPGA DNN inference accelerator.</p>
+      </div>
+      <div class="side"><span>Jan 2026 —</span></div>
+    </div>
+    <div class="row">
+      <div>
+        <h3>Undergraduate researcher — BITS Pilani Goa</h3>
+        <p>Accelerator micro-architecture under Prof. Vipin Kizheppatt. Systolic array design, SoC integration and the kNN accelerator.</p>
+      </div>
+      <div class="side"><span>Jan 2024 — May 2025</span></div>
+    </div>
+    <div class="row">
+      <div>
+        <h3>Embedded intern — C-DAC, Government of India</h3>
+        <p>A CNN pipeline with unsupervised feature extraction over time-series telemetry, profiled and compressed for edge deployment. Hyderabad.</p>
+      </div>
+      <div class="side"><span>May — Aug 2025</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Contact</h2>
+  <hr class="hr" style="margin-top:12px">
+  <p>I'm looking for silicon internships for 2027 — RTL design, verification, or EDA infrastructure. Happy to talk about any of the work above, particularly if you disagree with the guardrail premise.</p>
+  <div class="chan">
+    <a href="mailto:f20230822@goa.bits-pilani.ac.in">f20230822@goa.bits-pilani.ac.in</a>
+    <a href="https://github.com/harrybhasky">GitHub</a>
+    <a href="https://www.linkedin.com/in/hari-bhaskaran-k-584450290/">LinkedIn</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>K Hari Bhaskaran — Goa, India</span>
+  <span>Built by hand</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var btn = document.getElementById('themer');
+  var root = document.documentElement;
+  var stored = null;
+  try { stored = localStorage.getItem('theme'); } catch(e) {}
+  if (stored === 'light' || stored === 'dark') root.setAttribute('data-theme', stored);
+  btn.addEventListener('click', function(){
+    var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var now = root.getAttribute('data-theme') || (dark ? 'dark' : 'light');
+    var next = now === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch(e) {}
+  });
+})();
+</script>
+
+</body>
+</html>
