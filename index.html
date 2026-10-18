@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hari Bhaskaran</title>
-<meta name="description" content="Hari Bhaskaran — RTL design and verification at BITS Pilani Goa. Coordinator of the BITS Goa Quiz Club. Training for the Hyderabad Marathon.">
+<meta name="description" content="Hari Bhaskaran — RTL design and verification at BITS Pilani Goa. Building EdgeOS. Coordinator of the BITS Goa Quiz Club. Training for the Hyderabad Marathon.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,7 @@ body{
 a{color:inherit}
 a:focus-visible,button:focus-visible{outline:2px solid var(--hot); outline-offset:3px; border-radius:2px}
 ::selection{background:var(--hot); color:var(--paper)}
+img{max-width:100%}
 
 /* ---------- layout: sticky identity column + scrolling content ---------- */
 .shell{
@@ -57,16 +58,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--hot); outline-offse
 }
 .side{
   position:sticky; top:0; height:100vh; padding:44px 0 36px;
-  display:flex; flex-direction:column;
+  display:flex; flex-direction:column; overflow-y:auto; scrollbar-width:none;
 }
 .content{padding:44px 0 80px; min-width:0}
-.side{overflow-y:auto; scrollbar-width:none}
+
 .me{width:132px; height:auto; aspect-ratio:4/5; object-fit:cover; display:block; margin:0 0 22px; background:var(--rule)}
-
-.shot{margin:34px 0 0}
-.shot img{display:block; width:100%; height:auto; aspect-ratio:1400/788; object-fit:cover; background:var(--rule)}
-.shot figcaption{margin-top:9px; font-size:13px; color:var(--ink-3)}
-
 .name{
   font-family:var(--serif); font-weight:400; font-size:2.7rem;
   line-height:1; letter-spacing:-.02em; margin:0 0 18px;
@@ -86,7 +82,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--hot); outline-offse
 .nav a:hover,.nav a.on{color:var(--ink)}
 .nav a.on::before{width:34px; background:var(--hot)}
 
-.side-foot{display:flex; flex-direction:column; gap:14px; font-size:14px}
+.side-foot{display:flex; flex-direction:column; gap:14px; font-size:14px; padding-top:24px}
 .chan{display:flex; gap:16px; flex-wrap:wrap}
 .chan a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
 .chan a:hover{color:var(--hot-ink); border-color:var(--hot)}
@@ -99,7 +95,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--hot); outline-offse
 /* ---------- intro ---------- */
 .intro{
   font-family:var(--serif); font-size:clamp(1.55rem,2.6vw,2.1rem);
-  line-height:1.28; letter-spacing:-.012em; margin:0 0 22px; max-width:28ch;
+  line-height:1.28; letter-spacing:-.012em; margin:0 0 22px; max-width:30ch;
 }
 .intro em{color:var(--hot-ink)}
 .now{
@@ -107,21 +103,20 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--hot); outline-offse
   font-family:var(--mono); font-size:12px; color:var(--ink-2);
   border:1px solid var(--rule); border-radius:999px; padding:4px 12px 4px 10px;
 }
-.now::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--hot); box-shadow:0 0 0 3px var(--hot-wash)}
+.now::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--hot); box-shadow:0 0 0 3px var(--hot-wash); flex:none}
 
 /* ---------- section scaffolding ---------- */
 section{padding-top:92px; scroll-margin-top:20px}
 .sh{display:flex; align-items:baseline; gap:16px; margin:0 0 26px; padding-bottom:12px; border-bottom:1px solid var(--ink)}
 .sh .no{font-family:var(--mono); font-size:12px; color:var(--hot-ink)}
 .sh h2{font-family:var(--serif); font-weight:400; font-size:1.9rem; letter-spacing:-.015em; margin:0; line-height:1}
-.sh .aside{margin-left:auto; font-size:13px; color:var(--ink-3)}
+.sh .aside{margin-left:auto; font-size:13px; color:var(--ink-3); text-align:right}
+.prose p{color:var(--ink-2); margin:0 0 14px; max-width:64ch}
+.prose p b{color:var(--ink); font-weight:500}
 
-/* ---------- aegis ---------- */
-.aegis{display:grid; grid-template-columns:1fr; gap:0}
-.aegis h3{font-family:var(--serif); font-weight:500; font-size:1.5rem; margin:0 0 2px; letter-spacing:-.01em}
-.aegis .what{font-size:14px; color:var(--ink-3); margin:0 0 16px}
-.aegis p{color:var(--ink-2); max-width:64ch; margin:0 0 14px}
-.aegis p b{color:var(--ink); font-weight:500}
+/* ---------- feature block (Aegis, EdgeOS) ---------- */
+.feat h3{font-family:var(--serif); font-weight:500; font-size:1.5rem; margin:0 0 2px; letter-spacing:-.01em}
+.feat .what{font-size:14px; color:var(--ink-3); margin:0 0 16px}
 .scope{margin:26px 0; padding:22px 22px 16px; background:var(--card); border:1px solid var(--rule); overflow-x:auto}
 .scope svg{display:block; width:100%; min-width:460px; height:auto}
 .scope figcaption{margin-top:12px; font-size:13px; color:var(--ink-3); max-width:62ch}
@@ -136,6 +131,14 @@ section{padding-top:92px; scroll-margin-top:20px}
   .d2{animation-delay:.18s} .d3{animation-delay:.36s}
   @keyframes draw{to{stroke-dashoffset:0}}
 }
+.flow{
+  list-style:none; margin:0 0 18px; padding:0; counter-reset:f;
+  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+}
+.flow li{display:grid; grid-template-columns:28px 150px 1fr; gap:14px; padding:11px 0; font-size:14.5px; color:var(--ink-2)}
+.flow li+li{border-top:1px solid var(--rule)}
+.flow li::before{counter-increment:f; content:counter(f,decimal-leading-zero); font-family:var(--mono); font-size:11.5px; color:var(--hot-ink); padding-top:2px}
+.flow b{font-weight:500; color:var(--ink)}
 .nums{display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin:4px 0 16px}
 .nums div{padding:14px 0}
 .nums div+div{padding-left:18px; border-left:1px solid var(--rule)}
@@ -145,43 +148,46 @@ section{padding-top:92px; scroll-margin-top:20px}
 .more:hover{border-color:var(--hot)}
 .fine{font-size:13px; color:var(--ink-3); margin-left:14px}
 
-/* ---------- index list (projects, papers, experience) ---------- */
+/* ---------- photos ---------- */
+.shot{margin:28px 0 0}
+.shot img{display:block; width:100%; height:auto; background:var(--rule)}
+.shot figcaption,.pair figcaption{margin-top:9px; font-size:13px; color:var(--ink-3)}
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:28px 0 0}
+.pair figure{margin:0}
+.pair img{display:block; width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; background:var(--rule)}
+.pair.wide img{aspect-ratio:4/3}
+
+/* ---------- project index ---------- */
+.sub-h{font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); margin:52px 0 4px}
 .idx{list-style:none; margin:0; padding:0}
 .idx li{
   display:grid; grid-template-columns:1fr 150px; gap:6px 28px;
-  padding:18px 0; border-bottom:1px solid var(--rule);
+  padding:20px 0; border-bottom:1px solid var(--rule);
 }
-.idx h4{font-size:16px; font-weight:500; margin:0 0 4px; letter-spacing:-.005em}
-.idx h4 a{text-decoration:none; border-bottom:1px solid var(--rule)}
-.idx h4 a:hover{border-color:var(--hot); color:var(--hot-ink)}
-.idx p{margin:0; font-size:14.5px; color:var(--ink-2); max-width:62ch}
+.idx h4{font-size:16px; font-weight:500; margin:0 0 5px; letter-spacing:-.005em}
+.idx p{margin:0 0 6px; font-size:14.5px; color:var(--ink-2); max-width:64ch}
+.idx p:last-child{margin-bottom:0}
 .idx .m{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); text-align:right; line-height:1.8; padding-top:2px}
 .idx .m span{display:block}
-.idx .who{font-size:13.5px; color:var(--ink-3); margin:0 0 4px}
+.idx .m a{color:var(--hot-ink); text-decoration:none; border-bottom:1px solid var(--hot-wash)}
+.idx .m a:hover{border-color:var(--hot)}
+.idx .who{font-size:13.5px; color:var(--ink-3)}
 .idx .who b{color:var(--ink); font-weight:500}
-.sub-h{font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3); margin:44px 0 4px}
 
 /* ---------- quiz ---------- */
 .two{display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start}
-.prose p{color:var(--ink-2); margin:0 0 14px; max-width:46ch}
-.prose p b{color:var(--ink); font-weight:500}
+.two .prose p{max-width:46ch}
 .qcard{
   background:var(--ink); color:var(--paper); padding:24px 24px 20px;
-  position:relative; min-height:300px; display:flex; flex-direction:column;
+  min-height:300px; display:flex; flex-direction:column;
 }
 .qcard .qh{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; opacity:.6; margin-bottom:16px}
 .qcard .q{font-family:var(--serif); font-size:1.24rem; line-height:1.38; margin:0 0 18px}
-.qcard .a{
-  font-size:14.5px; line-height:1.55; border-top:1px solid rgba(127,127,127,.35);
-  padding-top:14px; margin:0 0 16px; display:none;
-}
+.qcard .a{font-size:14.5px; line-height:1.55; border-top:1px solid rgba(127,127,127,.35); padding-top:14px; margin:0 0 16px; display:none}
 .qcard .a b{color:var(--hot); font-weight:500}
 .qcard.open .a{display:block}
 .qbar{margin-top:auto; display:flex; gap:10px}
-.qbar button{
-  font:inherit; font-size:13px; cursor:pointer; border-radius:999px; padding:6px 14px;
-  border:1px solid rgba(127,127,127,.45); background:none; color:inherit;
-}
+.qbar button{font:inherit; font-size:13px; cursor:pointer; border-radius:999px; padding:6px 14px; border:1px solid rgba(127,127,127,.45); background:none; color:inherit}
 .qbar .rev{background:var(--hot); border-color:var(--hot); color:#fff}
 .qbar button:hover{border-color:currentColor}
 
@@ -200,15 +206,15 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
 /* ---------- small screens ---------- */
 @media (max-width:920px){
   .shell{grid-template-columns:1fr; gap:0; padding:0 20px}
-  .side{position:static; height:auto; padding:32px 0 0}
+  .side{position:static; height:auto; padding:32px 0 0; overflow:visible}
+  .me{width:96px; margin-bottom:16px}
   .nav{flex-direction:row; flex-wrap:wrap; gap:6px 18px; margin:0 0 22px}
   .nav a::before{display:none}
-  .side-foot{flex-direction:row; justify-content:space-between; align-items:center; flex-wrap:wrap}
+  .side-foot{flex-direction:row; justify-content:space-between; align-items:center; flex-wrap:wrap; padding-top:0}
   .content{padding-top:48px}
   section{padding-top:72px}
   .two{grid-template-columns:1fr}
 }
-@media (max-width:920px){ .me{width:96px; margin-bottom:16px} }
 @media (max-width:560px){
   .name{font-size:2.3rem}
   .idx li{grid-template-columns:1fr}
@@ -217,6 +223,9 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
   .nums b{font-size:1.1rem}
   .sh .aside{display:none}
   .fine{display:block; margin:8px 0 0}
+  .flow li{grid-template-columns:28px 1fr}
+  .flow li span{grid-column:2}
+  .pair{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -225,19 +234,21 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
 <div class="shell">
 
 <aside class="side">
-  <img class="me" src="img/hari.jpg" width="480" height="600" alt="Hari Bhaskaran standing outside a building on the BITS Goa campus">
+  <img class="me" src="img/hari.jpg" width="480" height="600" alt="Hari Bhaskaran on the BITS Goa campus">
   <h1 class="name">Hari<br>Bhaskaran<i>.</i></h1>
   <ul class="tags">
     <li><span class="k">01</span>Chip design &amp; verification</li>
-    <li><span class="k">02</span>Quizzer · BITS Goa Quiz Club</li>
-    <li><span class="k">03</span>Training for Hyderabad</li>
+    <li><span class="k">02</span>Building EdgeOS</li>
+    <li><span class="k">03</span>Quizzer · BITS Goa Quiz Club</li>
+    <li><span class="k">04</span>Training for Hyderabad</li>
   </ul>
 
   <nav class="nav" aria-label="Sections">
     <a href="#silicon">Silicon</a>
+    <a href="#edgeos">EdgeOS</a>
     <a href="#quiz">Quizzing</a>
     <a href="#run">Running</a>
-    <a href="#elsewhere">Experience</a>
+    <a href="#experience">Experience</a>
   </nav>
 
   <div class="side-foot">
@@ -252,18 +263,28 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
 
 <main class="content">
 
-  <p class="intro">I design and verify digital hardware at BITS Pilani Goa. When I'm not reading waveforms I'm <em>writing quiz questions</em> or out on a long run.</p>
+  <p class="intro">I design and verify digital hardware at BITS Pilani Goa, and I'm building <em>EdgeOS</em> with five others. The rest of the time I'm writing quiz questions or out on a long run.</p>
   <span class="now">Looking for 2027 silicon internships — RTL, DV, EDA</span>
 
   <!-- ===================== SILICON ===================== -->
   <section id="silicon">
     <div class="sh"><span class="no">01</span><h2>Silicon</h2><span class="aside">B.E. Electronics &amp; Instrumentation, '27</span></div>
 
-    <div class="aegis">
+    <div class="feat">
       <h3>Aegis</h3>
       <p class="what">Open-source RTL timing closure that won't touch a synchronizer it can't prove safe</p>
 
-      <p>An LLM suggests timing fixes, and Aegis doesn't trust any of them. Yosys and OpenSTA give the baseline, Yosys EQY checks every candidate for sequential equivalence, and a structural pass runs first. It finds <b>synchronizer chains, Gray-coded pointers, reset crossings and clock dividers</b> and locks them before the model sees anything. If a candidate edits a locked region, its checksum fails and it gets thrown out.</p>
+      <div class="prose">
+        <p>An LLM suggests timing fixes, and Aegis doesn't trust any of them. Before the model sees the design, a structural pass reads the RTL and SDC. It finds <b>synchronizer chains, Gray-coded pointers, reset crossings and clock dividers</b> and locks them with checksums. Every candidate then has to pass a fixed series of checks, and failing any one of them gets it rejected outright, not just scored lower:</p>
+      </div>
+
+      <ol class="flow">
+        <li><b>Checksum gate</b><span>Did it touch a locked region? If so, it's rejected before anything else runs.</span></li>
+        <li><b>Lint &amp; simulation</b><span>Does it still build and behave the same?</span></li>
+        <li><b>Yosys EQY</b><span>Sequential equivalence against the original design.</span></li>
+        <li><b>CDC re-check</b><span>The structural pass runs again on the new RTL.</span></li>
+        <li><b>Per-domain STA</b><span>OpenSTA measures WNS/TNS separately for each clock, so a gain in one domain can't hide a regression in another.</span></li>
+      </ol>
 
       <figure class="scope">
         <svg viewBox="0 0 700 170" role="img" aria-labelledby="wt">
@@ -283,47 +304,76 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
       </figure>
 
       <div class="nums">
-        <div><b>4 → 53%</b><span>SEC pass rate</span></div>
+        <div><b>4 → 53%</b><span>SEC pass rate vs. vanilla LLM</span></div>
         <div><b>0</b><span>lock violations</span></div>
-        <div><b>40+</b><span>designs run</span></div>
+        <div><b>40+</b><span>designs characterised</span></div>
+      </div>
+      <div class="prose">
+        <p>Tested on designs from multi-clock FIFOs and handshakes up to AXI/Wishbone bridges, Ethernet and a small SoC. On the SoC, Aegis kept top-level equivalence, cut area by 3.43%, and closed one clock domain's timing deficit. The other domain's deficit is still open, and the report says so.</p>
+        <p>It grew out of an earlier, simpler <a href="https://github.com/harrybhasky/genai-rtl-orchestrator">LangGraph + Gemini loop</a> that rewrote RTL and checked each iteration with Yosys, OpenSTA, Verilator and EQY, but had no structural guardrails.</p>
       </div>
       <a class="more" href="https://github.com/harrybhasky/aegis">github.com/harrybhasky/aegis →</a>
       <span class="fine">Paper in progress. Reports include the runs that got worse.</span>
     </div>
 
-    <p class="sub-h">Other builds</p>
+    <p class="sub-h">More hardware</p>
     <ul class="idx">
       <li>
-        <div><h4>Systolic array CNN accelerator</h4>
-        <p>4×4 output-stationary array on 16 DSP48s (INT8 multiply, INT32 accumulate), wrapped as an AXI4-Lite peripheral on Zynq-7000 with host-side im2col and DMA.</p></div>
-        <div class="m"><span>Verilog · Vivado</span><span>2024–25</span></div>
+        <div>
+          <h4>Hardware design automation for CNNs</h4>
+          <p>A 4×4 output-stationary systolic array on 16 DSP48 slices: INT8 multiply, INT32 accumulate. It sits as an AXI4-Lite peripheral on a Zynq-7000, with im2col and DMA handled on the host side.</p>
+          <p>The ModelGen flow takes a trained Keras model (MNIST, grayscale CIFAR-10) and exports its weights and biases as memory files for the hardware. It also dumps every layer's intermediate output, so the RTL can be checked layer by layer, not just on the final answer.</p>
+        </div>
+        <div class="m"><span>Verilog · Python · Zynq</span><span>2024–25 · team</span><span><a href="https://github.com/r0b0am13/Hardware-Design-Automation-for-CNNs">repo →</a></span></div>
       </li>
       <li>
-        <div><h4>Multi-metric kNN accelerator</h4>
-        <p>Four distance metrics share one ALU and switch with no cycle penalty, followed by a pipelined top-K sorter. 2.1× faster than a CPU on Artix-7.</p></div>
-        <div class="m"><span>Verilog · Artix-7</span><span>2025</span></div>
+        <div>
+          <h4>Multi-metric kNN accelerator</h4>
+          <p>Euclidean, Manhattan, Hamming and cosine distance share one ALU, and switching between them costs no cycles. Cosine is a similarity, so higher means closer, while the other three are distances. The datapath negates the cosine score in two's complement, so one find-the-minimum top-K sorter works for all four, with no bidirectional sorter to pay for.</p>
+          <p>Reference vectors are normalised once, offline in Python, and scaled to INT8, so the FPGA never computes a square root or a division. 2.1× faster than a CPU on Artix-7. Submitted to VLSID 2027.</p>
+        </div>
+        <div class="m"><span>Verilog · Artix-7</span><span>2025–26</span><span><a href="https://github.com/harrybhasky/KNN_FPGA">repo →</a></span></div>
       </li>
       <li>
-        <div><h4>FIFO verification environment</h4>
-        <p>Reference model, scoreboard, SVA assertions, directed tests for reset, overflow, underflow and wrap-around, then constrained-random runs until the coverage model was closed.</p></div>
-        <div class="m"><span>SystemVerilog</span><span>2025</span></div>
+        <div>
+          <h4>FIFO verification environment</h4>
+          <p>A self-checking SystemVerilog testbench for a parameterisable synchronous FIFO. It has a driver, a passive monitor, a scoreboard that checks against a golden reference queue, SVA assertions bound onto the DUT, and functional coverage. Eight directed tests (reset, overflow, underflow, pointer wrap) run, followed by a 500-cycle constrained-random regression.</p>
+        </div>
+        <div class="m"><span>SystemVerilog · SVA</span><span>2025</span><span><a href="https://github.com/harrybhasky/fifo_verification">repo →</a></span></div>
       </li>
       <li>
-        <div><h4><a href="https://github.com/vicharak-in/Gati">Gati, upstream fixes</a></h4>
-        <p>Fixed three test-infrastructure bugs in an FPGA inference accelerator: silent stimulus truncation, a non-blocking assignment race, and a reset bug that hid real failures. All merged.</p></div>
-        <div class="m"><span>Vicharak</span><span>2026–</span></div>
+        <div>
+          <h4>Gati, upstream fixes</h4>
+          <p>Gati is Vicharak's open-source INT8 CNN inference engine for FPGAs. I fixed three bugs in its test infrastructure, all now merged: stimulus being silently truncated by a width mismatch, a non-blocking assignment racing in combinational logic, and a reset-release bug that hid real failures.</p>
+        </div>
+        <div class="m"><span>Verilog</span><span>2026–</span><span><a href="https://github.com/vicharak-in/Gati">repo →</a></span></div>
       </li>
       <li>
-        <div><h4>RailOps AI</h4>
-        <p>Rail sensor data streamed through Kafka into a model that predicts failure risk and remaining useful life, with a live dashboard. Built in four weeks by a team of four.</p></div>
-        <div class="m"><span>2nd of 97</span><span>2026</span></div>
+        <div>
+          <h4>A small OS for RISC-V</h4>
+          <p>A kernel written from scratch in C for 32-bit RISC-V, with process management, system calls, a simple file system, a user library and a shell.</p>
+        </div>
+        <div class="m"><span>C · RISC-V</span><span>2025</span><span><a href="https://github.com/harrybhasky/RISC-V-OS">repo →</a></span></div>
       </li>
       <li>
-        <div><h4>32-bit single-cycle RISC core</h4>
-        <p>MIPS-style core supporting 20+ instructions, verified with directed tests on arithmetic, branch and memory paths.</p></div>
-        <div class="m"><span>Verilog</span><span>2024</span></div>
+        <div>
+          <h4>RailOps AI</h4>
+          <p>Rail sensor data streamed through Kafka into a model that predicts failure risk and remaining useful life, with automatic dispatch and a live dashboard. Built in four weeks by a team of four. We came 2nd of 97 teams.</p>
+        </div>
+        <div class="m"><span>Kafka · ML</span><span>2026</span></div>
       </li>
     </ul>
+
+    <div class="pair wide">
+      <figure>
+        <img src="img/breadboard.jpg" width="960" height="749" loading="lazy" alt="A computer built from logic chips across several breadboards, covered in jumper wires">
+        <figcaption>Where it started: my first computer, wired by hand on breadboards.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/arduino.jpg" width="1024" height="768" loading="lazy" alt="Hari with two friends and an Arduino co-founder, all giving thumbs up">
+        <figcaption>Meeting one of the founders of Arduino.</figcaption>
+      </figure>
+    </div>
 
     <p class="sub-h">Papers</p>
     <ul class="idx">
@@ -340,13 +390,39 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
     </ul>
   </section>
 
+  <!-- ===================== EDGEOS ===================== -->
+  <section id="edgeos">
+    <div class="sh"><span class="no">02</span><h2>EdgeOS</h2><span class="aside">Startup · BITS Pilani Goa</span></div>
+
+    <div class="feat">
+      <h3>Like Vercel, for edge AI</h3>
+      <p class="what">Upload a model and EdgeOS optimises it, deploys it and keeps it running on real hardware</p>
+      <div class="prose">
+        <p>Cloud developers don't provision servers anymore. They push, and the platform does the rest. Edge AI has nothing like that. Getting a model onto a Jetson means hand-tuning TensorRT. Moving to a different NPU means rewriting drivers and build scripts. Pushing an update to a device in the field can brick it, with no way to roll back.</p>
+        <p>We're building that missing layer. You upload a <b>PyTorch, ONNX or TensorFlow</b> model, and EdgeOS:</p>
+      </div>
+      <ol class="flow">
+        <li><b>Optimises</b><span>Converts and quantises the model for the target: TensorRT, OpenVINO, FP16 or INT8.</span></li>
+        <li><b>Packages</b><span>Builds a container image for the device.</span></li>
+        <li><b>Deploys</b><span>Pushes updates over the air with canary checks, and rolls back automatically if one fails.</span></li>
+        <li><b>Monitors</b><span>Shows CPU, memory and inference performance for every device on one dashboard.</span></li>
+      </ol>
+      <div class="prose"><p>We're starting narrow, with NVIDIA Jetson, which most early robotics and vision prototypes run on. The first goal is to cut deployment from days to minutes. After that come Intel, Qualcomm, AMD and Hailo NPUs. There are six of us. I bring the FPGA neural-network accelerator side, and I've been testing EdgeOS on Jetson hardware.</p></div>
+    </div>
+
+    <figure class="shot">
+      <img src="img/jetson.jpg" width="1200" height="734" loading="lazy" alt="Hari holding up an NVIDIA Jetson developer board in a lab, with a teammate working behind him">
+      <figcaption>Testing EdgeOS on a Jetson.</figcaption>
+    </figure>
+  </section>
+
   <!-- ===================== QUIZ ===================== -->
   <section id="quiz">
-    <div class="sh"><span class="no">02</span><h2>Quizzing</h2><span class="aside">Coordinator, BITS Goa Quiz Club</span></div>
+    <div class="sh"><span class="no">03</span><h2>Quizzing</h2><span class="aside">Coordinator, BITS Goa Quiz Club</span></div>
 
     <div class="two">
       <div class="prose">
-        <p>I'm a competitive quizzer and I coordinate the <b>BITS Goa Quiz Club</b>. In practice that means writing questions, hosting quizzes on campus, and taking a team to quizzes off campus.</p>
+        <p>I'm a competitive quizzer and I coordinate the <b>BITS Goa Quiz Club</b>. That means writing questions, hosting quizzes, and taking a team out to compete.</p>
         <p>A good question works like a good testbench. You can't guess it, but you can work it out from what you already know.</p>
         <p>Here are a few I like. Try them before you hit reveal.</p>
       </div>
@@ -364,19 +440,30 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
 
     <figure class="shot">
       <img src="img/quiz.jpg" width="1400" height="788" loading="lazy" alt="Quizzers seated in a lecture hall, concentrating on a question">
-      <figcaption>Quiz in a lecture hall at BITS Goa.</figcaption>
+      <figcaption>The finals of Waves Open.</figcaption>
     </figure>
+
+    <div class="pair">
+      <figure>
+        <img src="img/pearl.jpg" width="760" height="861" loading="lazy" alt="Hari at a podium hosting a quiz, with a slide reading Pop Com Quiz, Pearl 2K26">
+        <figcaption>Hosting the Pop Com Quiz at Pearl 2K26, BITS Hyderabad, with Pranav Gautam and Mihir.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/bql.jpg" width="760" height="970" loading="lazy" alt="Hari holding the BITS Quizzing League champions trophy">
+        <figcaption>BITS Quizzing League champions.</figcaption>
+      </figure>
+    </div>
   </section>
 
   <!-- ===================== RUN ===================== -->
   <section id="run">
-    <div class="sh"><span class="no">03</span><h2>Running</h2><span class="aside">Hyderabad Marathon</span></div>
+    <div class="sh"><span class="no">04</span><h2>Running</h2><span class="aside">Hyderabad Marathon</span></div>
 
     <div class="prose"><p>I'm training for the <b>Hyderabad Marathon</b>: 42.195 km, building mileage week by week. Planning a training block is a lot like timing closure. Find what's slowing you down, fix that, and don't break anything else.</p></div>
 
     <figure class="course">
       <svg viewBox="0 0 700 120" role="img" aria-labelledby="ct">
-        <title id="ct">The marathon distance with markers at 5, 10, 21.1, 30 and 42.195 km, and the wall marked around 30 to 35 km</title>
+        <title id="ct">The marathon distance with markers at 5, 10, 21.1, 30 and 42.195 km, and the wall marked between 30 and 35 km</title>
         <rect class="wall" x="485" y="34" width="76" height="34"/>
         <text class="t th" x="494" y="26">the wall</text>
         <line class="ln" x1="30" y1="51" x2="670" y2="51"/>
@@ -393,9 +480,14 @@ footer{margin-top:100px; padding-top:18px; border-top:1px solid var(--rule); fon
   </section>
 
   <!-- ===================== EXPERIENCE ===================== -->
-  <section id="elsewhere">
-    <div class="sh"><span class="no">04</span><h2>Experience</h2></div>
+  <section id="experience">
+    <div class="sh"><span class="no">05</span><h2>Experience</h2></div>
     <ul class="idx">
+      <li>
+        <div><h4>Co-founder, EdgeOS</h4>
+        <p>Edge AI deployment infrastructure, starting with NVIDIA Jetson.</p></div>
+        <div class="m"><span>current</span></div>
+      </li>
       <li>
         <div><h4>Open-source contributor, Vicharak</h4>
         <p>RTL and verification infrastructure for Gati, an FPGA DNN inference accelerator.</p></div>

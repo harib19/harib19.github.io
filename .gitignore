@@ -1,2 +1,8 @@
-IMG_*.jpg
+IMG_*
+*.JPG
+*.jpg
+!img/*.jpg
+*.HEIC
+*.MOV
+*.pdf
 .DS_Store
