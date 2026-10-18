@@ -1,20 +1,20 @@
-# harrybhasky.github.io
+# harib19.github.io
 
 Personal site. One file, no build step, no dependencies.
 
 ## Deploy on GitHub Pages (free)
 
-1. Create a repo named exactly `harrybhasky.github.io`
+1. Repo (under the harib19 org) is named exactly `harib19.github.io`
 2. Push `index.html` to the `main` branch
 3. Settings → Pages → Source: **Deploy from a branch** → `main` / `root`
-4. Live at `https://harrybhasky.github.io` in a minute or two
+4. Live at `https://harib19.github.io` in a minute or two
 
 ```bash
 git init
 git add index.html README.md
 git commit -m "Initial site"
 git branch -M main
-git remote add origin https://github.com/harrybhasky/harrybhasky.github.io.git
+git remote add origin https://github.com/harib19/harib19.github.io.git
 git push -u origin main
 ```
 
