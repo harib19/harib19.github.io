@@ -206,6 +206,22 @@ tbody tr:last-child td{border-bottom:0}
 </section>
 
 <section>
+  <h2>LLM usage</h2>
+  <div class="tbl"><table>
+    <thead><tr><th class="l">19 paired runs (median)</th><th>Aegis</th><th>Dr. RTL (port)</th></tr></thead>
+    <tbody>
+      <tr><td>LLM calls per run</td><td>42</td><td>50</td></tr>
+      <tr><td>Tokens per call</td><td class="w">11.4k</td><td>29.9k</td></tr>
+      <tr><td>Tokens per run</td><td class="w">573k</td><td>1,497k</td></tr>
+      <tr><td>Runs with fewer tokens</td><td class="w">18 / 19</td><td>1 / 19</td></tr>
+      <tr><td>Runs with fewer calls</td><td>10 / 19</td><td>9 / 19</td></tr>
+      <tr class="mean"><td>Median token ratio (Dr. RTL / Aegis)</td><td colspan="2">1.96×</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Measurement: tokens reported by the LLM interface for every call (input, including cached input, plus output), the same accounting for both agents. The saving comes from smaller calls, not fewer calls: each Dr. RTL call carries the whole design and its full skill library, while Aegis sends one region and its eligible skills. Counts are for our port of Dr. RTL, which passes each agent's files inside its prompt. Dr. RTL reports about $50 of LLM use for its 20 designs with its own agent runtime, so absolute numbers are not comparable to that figure.</p>
+</section>
+
+<section>
   <h2>CDC mutation benchmark</h2>
   <div class="tbl"><table>
     <thead><tr><th class="l">Check</th><th>Unsafe caught (of 149)</th><th>False alarms (of 150 safe)</th></tr></thead>
