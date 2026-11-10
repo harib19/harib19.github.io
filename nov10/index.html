@@ -111,7 +111,7 @@ tbody tr:last-child td{border-bottom:0}
     <div class="tbl"><table>
       <thead><tr><th class="l">Common setting</th><th class="l">Value</th></tr></thead>
       <tbody>
-        <tr><td>Budget</td><td class="l">5 iterations × 5 candidates</td></tr>
+        <tr><td>Budget</td><td class="l">5 iterations × 5 candidates (RTL-OPT: 3 iterations)</td></tr>
         <tr><td>Final checks</td><td class="l">EQY vs. original + CDC re-check</td></tr>
         <tr><td>Failed EQY</td><td class="l">counted as no change</td></tr>
         <tr><td>Power</td><td class="l">activity 0.1, duty 0.5, all nets</td></tr>
@@ -218,6 +218,22 @@ tbody tr:last-child td{border-bottom:0}
     </tbody>
   </table></div>
   <p class="note">15 designs (6 PULP designs excluded: unmodified copy fails the structural check). All 20 false alarms are on OpenTitan primitives.</p>
+</section>
+
+<section>
+  <h2>Released artifact</h2>
+  <p>Submitted with the paper as an anonymized repository for review; public release on acceptance.</p>
+  <div class="tbl"><table>
+    <thead><tr><th class="l">Component</th><th class="l">Contents</th><th class="l">Origin</th></tr></thead>
+    <tbody>
+      <tr><td><b>CDC mutation benchmark</b></td><td class="l wrap">317 mutants over 21 multi-clock designs; 9 operators (5 CDC-unsafe: sync_remove, sync_bypass, sync_wrong_clock, binary_cross, qual_bypass; 3 CDC-safe: extra_stage, post_invert, free_dblinv; identity control). Ground-truth labels plus the verdict of every check: lint, multi-clock simulation, EQY, structural CDC, contract re-proof.</td><td class="l">New (ours)</td></tr>
+      <tr><td><b>Multi-clock optimization suite</b></td><td class="l wrap">9 designs with 2–4 clocks, per-domain SDC constraints (75% of critical path), Phase 1 crossing classification; soc test system</td><td class="l">New constraints and curation; designs from OpenTitan, PULP, Forencich, ZipCPU, dpretet</td></tr>
+      <tr><td>Aegis framework</td><td class="l wrap">CDC shield, per-domain region selection, verification cascade, domain-aware scoring, 65-entry skill library</td><td class="l">Ours (skills 1–47 from Dr. RTL, Apache-2.0)</td></tr>
+      <tr><td>Dr. RTL reproduction</td><td class="l wrap">Open-source port of the released agents (Yosys + OpenSTA + EQY)</td><td class="l">Ours</td></tr>
+      <tr><td>Raw results</td><td class="l wrap">Every completed run: metrics, per-iteration weights, power, final EQY/CDC checks; metastability-injection testbench</td><td class="l">Ours</td></tr>
+      <tr><td>Third-party designs</td><td class="l wrap">Fetched at pinned commits, not redistributed</td><td class="l">Dr. RTL suite, RTL-OPT, open-source IP</td></tr>
+    </tbody>
+  </table></div>
 </section>
 </main>
 
