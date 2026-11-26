@@ -138,6 +138,7 @@ section{padding-top:88px; scroll-margin-top:20px}
 .more{font-size:14.5px; color:var(--hot-ink); text-decoration:none; border-bottom:1px solid var(--hot-wash)}
 .more:hover{border-color:var(--hot)}
 .fine{font-size:13px; color:var(--ink-3); margin-left:14px}
+.what .tag{font-weight:500; color:var(--hot-ink)}
 
 /* ---------- photos ---------- */
 .shot{margin:28px 0 0}
@@ -263,9 +264,10 @@ footer{margin-top:96px; padding:26px 0 0; border-top:1px solid var(--ink); displ
   <section id="work">
     <div class="sh"><h2>Work</h2></div>
 
+    <p class="sub-h" style="margin:0 0 14px">Current projects</p>
     <div class="feat">
       <h3>Aegis</h3>
-      <p class="what">AI-driven timing optimisation for multi-clock RTL</p>
+      <p class="what">AI-driven timing optimisation for multi-clock RTL · <b class="tag">Submitted to DAC 2027</b></p>
 
       <div class="prose">
         <p>LLMs can suggest useful timing fixes for RTL. On multi-clock designs, though, they also make changes that look fine and aren't: they rearrange a synchronizer or mix up a Gray-coded pointer. Equivalence checking and simulation don't model metastability, so neither catches it. When I reproduced a state-of-the-art LLM optimisation agent in an open-source flow, 9 of the 60 multi-clock candidates it accepted as equivalent were CDC-unsafe. On an AXI-Lite clock-domain bridge, its chosen rewrite duplicated a synchronizer stage and corrupted transactions under metastability injection. Aegis is meant to get better AI-optimised RTL out of the LLM for multi-clock designs, without those clock-crossing bugs.</p>
@@ -307,19 +309,19 @@ footer{margin-top:96px; padding:26px 0 0; border-top:1px solid var(--ink); displ
         <p>An <a href="https://github.com/harrybhasky/genai-rtl-orchestrator">earlier version</a> without the structural checks is also on GitHub.</p>
       </div>
       <a class="more" href="https://github.com/harrybhasky/aegis">github.com/harrybhasky/aegis →</a>
-      <span class="fine">Submitted to DAC 2027.</span>
+    </div>
+
+    <div class="feat" style="margin-top:56px">
+      <h3>MutaSVA</h3>
+      <p class="what">LLM-written SystemVerilog assertions that catch real bugs · in progress</p>
+      <div class="prose">
+        <p>LLM-generated SystemVerilog assertions are usually scored on whether they compile and prove, which rewards assertions that are vacuous or trivially true. MutaSVA scores them on whether they catch bugs instead. The LLM proposes assertions and open-source formal tools (SymbiYosys) act as the oracle: candidates that fail, are vacuous or are tautologies are filtered out, then the RTL is mutated. For each mutant the suite still misses, a miter of the original and the mutant gives a distinguishing trace, which goes back to the LLM to write an assertion that kills it.</p>
+        <p>Since open-source Yosys doesn't parse concurrent SVA, I wrote a translator from a restricted SVA subset to Yosys immediate assertions, checked against Verilator's native SVA with no mismatches over about 105k assertion events. Suites will be scored on held-out mutants, against a budget-matched resampling baseline.</p>
+      </div>
     </div>
 
     <p class="sub-h">Other projects</p>
     <ul class="idx">
-      <li>
-        <div>
-          <h4>MutaSVA</h4>
-          <p>LLM-generated SystemVerilog assertions are usually scored on whether they compile and prove, which rewards assertions that are vacuous or trivially true. MutaSVA scores them on whether they catch bugs instead. The LLM proposes assertions and open-source formal tools (SymbiYosys) act as the oracle: candidates that fail, are vacuous or are tautologies are filtered out, then the RTL is mutated. For each mutant the suite still misses, a miter of the original and the mutant gives a distinguishing trace, which goes back to the LLM to write an assertion that kills it.</p>
-          <p>Since open-source Yosys doesn't parse concurrent SVA, I wrote a translator from a restricted SVA subset to Yosys immediate assertions, checked against Verilator's native SVA with no mismatches over about 105k assertion events. Suites will be scored on held-out mutants, against a budget-matched resampling baseline.</p>
-        </div>
-        <div class="m"><span>SVA · SymbiYosys · LLMs</span><span>2026</span><span>in progress</span></div>
-      </li>
       <li>
         <div>
           <h4>Systolic array CNN accelerator</h4>
