@@ -268,7 +268,7 @@ footer{margin-top:96px; padding:26px 0 0; border-top:1px solid var(--ink); displ
       <p class="what">AI-driven timing optimisation for multi-clock RTL</p>
 
       <div class="prose">
-        <p>LLMs can suggest useful timing fixes for RTL. On multi-clock designs, though, they also make changes that look fine and aren't: they rearrange a synchronizer or mix up a Gray-coded pointer. Equivalence checking and simulation don't model metastability, so neither catches it. Aegis is meant to get better AI-optimised RTL out of the LLM for multi-clock designs, without those clock-crossing bugs.</p>
+        <p>LLMs can suggest useful timing fixes for RTL. On multi-clock designs, though, they also make changes that look fine and aren't: they rearrange a synchronizer or mix up a Gray-coded pointer. Equivalence checking and simulation don't model metastability, so neither catches it. When I reproduced a state-of-the-art LLM optimisation agent in an open-source flow, 9 of the 60 multi-clock candidates it accepted as equivalent were CDC-unsafe. On an AXI-Lite clock-domain bridge, its chosen rewrite duplicated a synchronizer stage and corrupted transactions under metastability injection. Aegis is meant to get better AI-optimised RTL out of the LLM for multi-clock designs, without those clock-crossing bugs.</p>
         <p>Before anything is generated, a structural pass reads the RTL and SDC and locks the clock-crossing logic: <b>synchronizer chains, Gray pointers, reset crossings and clock dividers</b>. Every rewrite the LLM proposes then has to pass these checks:</p>
       </div>
 
@@ -298,20 +298,28 @@ footer{margin-top:96px; padding:26px 0 0; border-top:1px solid var(--ink); displ
       </figure>
 
       <div class="nums">
-        <div><b>4% → 53%</b><span>candidates passing SEC</span></div>
-        <div><b>0</b><span>lock violations</span></div>
-        <div><b>40+</b><span>designs tested</span></div>
+        <div><b>142 / 149</b><span>CDC-unsafe mutants rejected, incl. all 32 that pass equivalence checking</span></div>
+        <div><b>+9.0%</b><span>mean WNS gain on multi-clock designs (vs +7.4% for the reproduced agent)</span></div>
+        <div><b>2.1×</b><span>fewer LLM tokens (median)</span></div>
       </div>
       <div class="prose">
-        <p>The test designs range from multi-clock FIFOs and handshakes up to AXI/Wishbone bridges, Ethernet and a small SoC. On the SoC, Aegis kept top-level equivalence, reduced area by 3.43%, and fixed the timing in one of the two failing clock domains. The other one is still failing.</p>
+        <p>To test the checks themselves I built a CDC mutation benchmark from open-source multi-clock IP (FIFOs, handshakes, AXI/Wishbone bridges, Ethernet). The re-check rejects 142 of 149 CDC-unsafe mutants, with 20 false alarms on 150 safe ones. Across 13 paired multi-clock runs, no Aegis result regresses under its CDC checks. In an ablation with the guardrails removed, the same loop breaks a crossing. On single-clock benchmarks Aegis also gets larger mean verified timing gains, mostly with fewer tokens.</p>
         <p>An <a href="https://github.com/harrybhasky/genai-rtl-orchestrator">earlier version</a> without the structural checks is also on GitHub.</p>
       </div>
       <a class="more" href="https://github.com/harrybhasky/aegis">github.com/harrybhasky/aegis →</a>
-      <span class="fine">Manuscript in preparation.</span>
+      <span class="fine">Submitted to DAC 2027.</span>
     </div>
 
     <p class="sub-h">Other projects</p>
     <ul class="idx">
+      <li>
+        <div>
+          <h4>MutaSVA</h4>
+          <p>LLM-generated SystemVerilog assertions are usually scored on whether they compile and prove, which rewards assertions that are vacuous or trivially true. MutaSVA scores them on whether they catch bugs instead. The LLM proposes assertions and open-source formal tools (SymbiYosys) act as the oracle: candidates that fail, are vacuous or are tautologies are filtered out, then the RTL is mutated. For each mutant the suite still misses, a miter of the original and the mutant gives a distinguishing trace, which goes back to the LLM to write an assertion that kills it.</p>
+          <p>Since open-source Yosys doesn't parse concurrent SVA, I wrote a translator from a restricted SVA subset to Yosys immediate assertions, checked against Verilator's native SVA with no mismatches over about 105k assertion events. Suites will be scored on held-out mutants, against a budget-matched resampling baseline.</p>
+        </div>
+        <div class="m"><span>SVA · SymbiYosys · LLMs</span><span>2026</span><span>in progress</span></div>
+      </li>
       <li>
         <div>
           <h4>Systolic array CNN accelerator</h4>
@@ -384,9 +392,9 @@ footer{margin-top:96px; padding:26px 0 0; border-top:1px solid var(--ink); displ
         <div class="m"><span>VLSID 2027</span><span>submitted</span></div>
       </li>
       <li>
-        <div><h4>Structural guardrails for LLM-driven RTL optimisation</h4>
-        <p class="who"><b>K. Hari Bhaskaran</b></p></div>
-        <div class="m"><span>in preparation</span></div>
+        <div><h4>Aegis: CDC-Safe Agentic Timing Optimization of Multi-Clock RTL</h4>
+        <p class="who"><b>K. Hari Bhaskaran</b>, V. Lalit Kishore</p></div>
+        <div class="m"><span>DAC 2027</span><span>submitted</span></div>
       </li>
     </ul>
   </section>
